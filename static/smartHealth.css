@@ -1,0 +1,17 @@
+body {
+    background-image:url(smartHealthBackgroud.jpg);
+    background-size:cover;
+    background-repeat: no-repeat;
+}
+
+h1.title {
+    color: #1f1f1f;
+}
+
+h2.title {
+    color: #686868;
+}
+
+footer {
+    text-align: center;
+}
