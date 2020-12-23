@@ -2,7 +2,7 @@ import psycopg2 as dbapi2
 
 import os
 
-DATABASE_URL = os.environ['DATABASE_URL']
+# DATABASE_URL = os.environ['DATABASE_URL']
 
 
 def query(url, table_name):
