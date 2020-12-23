@@ -1,49 +1,51 @@
-{% extends "layout.html" %}
-{% block title %}Login{% endblock %}
-{% block content %}
-<section class="section">
-	<div class="container has-text-centered">
-	  <h1 class="title is-capitalized">Login</h1>
-	  <p class="subtitle  is-italic">Login/Register operations are coming soon!..</p>
-	</div>
-</section>
-<section class="hero">
-	<div class="container">	
-      <div class="columns is-centered">
-        <div class="column is-5-tablet is-4-desktop is-3-widescreen">
-          <form action="" class="box">
-            <div class="field">
-              <label for="" class="label">Email</label>
-              <div class="control has-icons-left">
-                <input type="email" placeholder="e.g. bobsmith@gmail.com" class="input" required>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login</title>
+    <!-- <link rel="shortcut icon" href="/static/?.png" /> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='smartHealth.css') }}" />
+</head>
+
+<body>
+    <header>
+        <div class="level-right">
+            <a class="button is-rounded is-ghost is-medium level-item" href="{{ url_for('login_page_doctor') }}">
                 <span class="icon is-small is-left">
-                  <i class="fa fa-user"></i>
+                  <i class="fa fa-cog"></i>
                 </span>
-              </div>
+            </a>
+          </div>
+    </header>
+    <main>
+        <section class="section">
+            <div class="content">
+                <div class="box">
+                    
+                        <div class="block">
+                            <div class="columns is-centered">
+                                <a class="button is-link" href="{{ url_for('login_page_doctor') }}">Doctor Login</a>
+                            </div>
+                        </div>
+                        <div class="block">
+                            <div class="columns is-centered">
+                                <a class="button is-link">Patient Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="field">
-              <label for="" class="label">Password</label>
-              <div class="control has-icons-left">
-                <input type="password" placeholder="*******" class="input" required>
-                 <span class="icon is-small is-left">
-                  <i class="fa fa-envelope"></i>
-                </span>
-              </div>
-            </div>
-            <div class="field">
-              <label for="" class="checkbox">
-                <input type="checkbox">
-               Remember me
-              </label>
-            </div>
-            <div class="field">
-              <button class="button is-success">
-                Login
-              </button>
-            </div>
-          </form>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="content">
+            <small>&copy; 2020, Smart Health</small>
         </div>
-      </div>
-    </div>
-</section>
-{% endblock %}
+    </footer>
+</body>
+
+</html>
