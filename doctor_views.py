@@ -10,6 +10,9 @@ import dboperations
 
 # DATABASE_URL = os.environ['DATABASE_URL']
 
+def login_page_doctor():
+     return render_template("login_doctor.html")
+
 def home_page_doctor():
     today = datetime.today()
     day_name = today.strftime("%A")
