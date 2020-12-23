@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask import render_template
 from flask import request, redirect, url_for
 
@@ -14,9 +13,6 @@ def login_page_doctor():
      return render_template("login_doctor.html")
 
 def home_page_doctor():
-    today = datetime.today()
-    day_name = today.strftime("%A")
-
     # rows = query(DATABASE_URL, "")
-    # return render_template("home_doctor.html", rows=sorted(rows), len=len(rows))
-    return render_template("home_doctor.html", day=day_name)
+    rows={"...", "...", "...", "...", "...", "..."}
+    return render_template("home_doctor.html", rows=sorted(rows), len=len(rows))

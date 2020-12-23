@@ -1,12 +1,38 @@
 {% extends "layout_doctor.html" %}
 {% block title %}Home - Doctor{% endblock %}
 {% block content %}
-    <section class="hero">
-      <div class="hero-body">
-        <div class="container has-text-centered">
-          <h1 class="title">Welcome to Smart Health!</h1>
-          <p class="subtitle  is-italic">Have a nice {{ day }}!</p>
-        </div>
-      </div>
-    </section>
+<h1 class="title">Home</h1>
+
+<table class="table is-narrow is-striped is-hoverable">
+
+    <tr>
+        <th>...</th>
+        <th>...</th>
+        <th>...</th>
+        <th>...</th>
+        <th>...</th>
+        <th>...</th>
+    </tr>
+{% for i in range(0,len) %}
+    <tr>
+        <td>{{ rows[i][0] }}</td>
+        <td>{{ rows[i][1] }}</td>
+        <td>{{ rows[i][2] }}</td>
+        <td>{{ rows[i][3] }}</td>
+        <td>{{ rows[i][4] }}</td>
+        <td>
+            <a class="button is-link">
+                <span class="icon is-small is-left">
+                  <i class="fa fa-edit"></i>
+                </span></a>
+        </td>
+    </tr>
+{%endfor%} 
+</table>
+<div class="field is-grouped is-grouped-centered">
+    <span class="navbar-item">
+            <a class="button is-link">...</a>
+    </span>
+</div>
+
 {% endblock %}
