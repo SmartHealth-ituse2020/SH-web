@@ -47,7 +47,6 @@ INIT_STATEMENTS = [
 		patientsurname character varying(10) COLLATE pg_catalog."default",
 		patientgender character varying(10) COLLATE pg_catalog."default",
 		patientage integer,
-		patientnid integer,
 		patientlogcode integer NOT NULL,
 		CONSTRAINT patient_pkey PRIMARY KEY (patientid)
 	);
@@ -94,8 +93,8 @@ def initialize(url):
 
 if __name__ == "__main__":
     # url = os.getenv("DATABASE_URL")
+	url = "postgres://fvtkacqijrpxfk:9af8c01dc052361fd51630b634e9a1df34106a7eae0ac736c6a36099bb476d87@ec2-54-246-115-40.eu-west-1.compute.amazonaws.com:5432/d4qj8s0lt8sev8"
     # if url is None:
     #    print("Usage: DATABASE_URL=url python dbinit.py", file=sys.stderr)
     #    sys.exit(1)
-    # initialize(url)
-    
+	initialize(url)
