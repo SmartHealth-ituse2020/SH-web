@@ -17,3 +17,31 @@ def home_page_doctor():
     rows = dboperations.query(DATABASE_URL, "patient")
 #     rows={"...", "...", "...", "...", "...", "..."}
     return render_template("home_doctor.html", rows=sorted(rows), len=len(rows))
+
+def add_patient_page_doctor():
+    
+    if request.method == "GET":
+        return render_template(
+            "patient_add.html")
+    else:
+        form_patientid = request.form["patientid"]
+        form_patientname = request.form["patientname"]
+        form_patientsurname = request.form["patientsurname"]
+        form_patientgender = request.form["patientgender"]
+        form_patientage = request.form["patientage"]
+        form_patientlogcode = request.form["patientlogcode"]
+        
+        STATEMENTS = [ '''
+                      INSERT INTO "patient" (patientid,patientname,patientsurname,patientgender,patientage,patientlogcode)
+                      VALUES (%s,'%s','%s','%s','%s','%s');
+                      ''' % (form_patientid, form_patientname, form_patientsurname, form_patientgender, form_patientage, form_patientlogcode)  ]
+        
+        url= DATABASE_URL
+        with dbapi2.connect(url) as connection:
+           cursor = connection.cursor()
+           for statement in STATEMENTS:
+               cursor.execute(statement)
+        
+           cursor.close()
+        
+        return redirect(url_for("home_page_doctor"))

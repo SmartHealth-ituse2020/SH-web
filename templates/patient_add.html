@@ -1,0 +1,48 @@
+{% extends "layout_doctor.html" %}
+{% block title %}Add Personnel{% endblock %}
+{% block content %}
+<h1 class="title">New Patient</h1>
+<form action="" method="post" name="patient_add">
+  <div class="field">
+    <label for="patientid" class="label">patientid</label>
+    <div class="control">
+      <input type="text" name="patientid" class="input" />
+    </div>
+  </div>
+  <div class="field">
+    <label for="patientname" class="label">patientname</label>
+    <div class="control">
+      <input type="text" name="patientname" class="input" />
+    </div>
+  </div>
+  <div class="field">
+    <label for="patientsurname" class="label">patientsurname</label>
+    <div class="control">
+      <input type="text" name="patientsurname" class="input" />
+    </div>
+  </div>
+  <div class="field">
+    <label for="patientgender" class="label">patientgender</label>
+    <div class="control">
+      <input type="text" name="patientgender" class="input" />
+    </div>
+  </div>
+  <div class="field">
+    <label for="patientage" class="label">patientage</label>
+    <div class="control">
+      <input type="text" name="patientage" class="input" />
+    </div>
+  </div>
+  <div class="field">
+    <label for="patientlogcode" class="label">patientlogcode</label>
+    <div class="control">
+      <input type="text" name="patientlogcode" class="input" />
+    </div>
+  </div>
+  <div class="field is-grouped">
+    <div class="control">
+      <button class="button is-primary is-small">Add</button>
+    </div>
+  </div>
+</form>
+{% endblock %}
