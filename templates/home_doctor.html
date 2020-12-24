@@ -6,12 +6,13 @@
 <table class="table is-narrow is-striped is-hoverable">
 
     <tr>
-        <th>...</th>
-        <th>...</th>
-        <th>...</th>
-        <th>...</th>
-        <th>...</th>
-        <th>...</th>
+        <th>patientid</th>
+        <th>patientname</th>
+        <th>patientsurname</th>
+        <th>patientgender</th>
+        <th>patientage</th>
+        <th>patientlogcode</th>
+        <th></th>
     </tr>
 {% for i in range(0,len) %}
     <tr>
@@ -19,6 +20,7 @@
         <td>{{ rows[i][1] }}</td>
         <td>{{ rows[i][2] }}</td>
         <td>{{ rows[i][3] }}</td>
+        <td>{{ rows[i][4] }}</td>
         <td>{{ rows[i][4] }}</td>
         <td>
             <a class="button is-link">
