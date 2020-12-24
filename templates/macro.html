@@ -1,0 +1,22 @@
+{% macro render_field(field, label_class, icon) %}
+    <div class="field">
+
+        {{ field.label(class=label_class) }}
+        {% if icon %}
+            <div class="control has-icons-left">
+            {{ field(**kwargs)|safe }}
+            <span class="icon is-small is-left">
+                  <i class="{{ icon }}"></i>
+            </span>
+            </div>
+        {% else %}
+            {{ field(**kwargs)|safe }}
+        {% endif %}
+
+        {% if field.errors %}
+            {% for error in field.errors %}
+                {{ error }}
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endmacro %}
