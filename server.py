@@ -1,15 +1,18 @@
 from flask import Flask
-
-import psycopg2 as dbapi2
-        
-import views, doctor_views, dboperations
+import doctor_views
+import views
 import os
-SECRET_KEY = os.urandom(32)
 
-app=Flask(__name__)
+SECRET_KEY = os.urandom(32)  # assign a random secret key for CSRF Token
+
+app = Flask(__name__)
 app.config["DEBUG"] = True
 app.config['SECRET_KEY'] = SECRET_KEY
-    
+
+app.config['DATABASE_URL'] = """postgres://fvtkacqijrpxfk:9af8c01dc052361fd51630b634e9a1df34106a7eae0ac736c\
+6a36099bb476d87@ec2-54-246-115-40.eu-west-1.compute.amazonaws.com:5432/d4qj8s0lt8sev8"""
+
+
 app.add_url_rule("/doctor", methods=["GET", "POST"], view_func=doctor_views.home_page_doctor)
 app.add_url_rule("/", view_func=views.login_page)
 app.add_url_rule("/login", view_func=views.login_page)

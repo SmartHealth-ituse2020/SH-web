@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, InputRequired
+from wtforms.validators import DataRequired, Length
 
 
 class DoctorLoginForm(FlaskForm):
@@ -16,6 +16,8 @@ class DoctorLoginForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super(DoctorLoginForm, self).__init__(*args, **kwargs)
 
+
+"""
 class DoctorLoginForm(FlaskForm):
     national_id = StringField('National ID',
                               validators=[DataRequired(), Length(8, 15)],
@@ -28,3 +30,4 @@ class DoctorLoginForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super(DoctorLoginForm, self).__init__(*args, **kwargs)
+"""
