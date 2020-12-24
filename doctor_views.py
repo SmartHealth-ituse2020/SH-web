@@ -21,27 +21,43 @@ def home_page_doctor():
 def add_patient_page_doctor():
     
     if request.method == "GET":
-        return render_template(
-            "patient_add.html")
+          values = {"patientname":""}
+          return render_template("patient_add.html", values=values)
     else:
-        form_patientid = request.form["patientid"]
-        form_patientname = request.form["patientname"]
-        form_patientsurname = request.form["patientsurname"]
-        form_patientgender = request.form["patientgender"]
-        form_patientage = request.form["patientage"]
-        form_patientlogcode = request.form["patientlogcode"]
-        
-        STATEMENTS = [ '''
-                      INSERT INTO "patient" (patientid,patientname,patientsurname,patientgender,patientage,patientlogcode)
-                      VALUES (%s,'%s','%s','%s','%s','%s');
-                      ''' % (form_patientid, form_patientname, form_patientsurname, form_patientgender, form_patientage, form_patientlogcode)  ]
-        
-        url= DATABASE_URL
-        with dbapi2.connect(url) as connection:
-           cursor = connection.cursor()
-           for statement in STATEMENTS:
-               cursor.execute(statement)
-        
-           cursor.close()
-        
-        return redirect(url_for("home_page_doctor"))
+          valid = validate_patient_form(request.form)
+          if not valid:
+               return render_template("patient_add.html", values=request.form)
+          
+          form_patientid = request.form["patientid"]
+          form_patientname = request.form["patientname"]
+          form_patientsurname = request.form["patientsurname"]
+          form_patientgender = request.form["patientgender"]
+          form_patientage = request.form["patientage"]
+          form_patientlogcode = request.form["patientlogcode"]
+          
+          STATEMENTS = [ '''
+                         INSERT INTO "patient" (patientid,patientname,patientsurname,patientgender,patientage,patientlogcode)
+                         VALUES (%s,'%s','%s','%s','%s','%s');
+                         ''' % (form_patientid, form_patientname, form_patientsurname, form_patientgender, form_patientage, form_patientlogcode)  ]
+          
+          url= DATABASE_URL
+          with dbapi2.connect(url) as connection:
+               cursor = connection.cursor()
+               for statement in STATEMENTS:
+                    cursor.execute(statement)
+               
+               cursor.close()
+          
+          return redirect(url_for("home_page_doctor"))
+
+def validate_patient_form(form):
+    form.data = {}
+    form.errors = {}
+    
+    form_topic = form.get("patientname", "").strip()
+    if len(form_topic) == 0:
+        form.errors["patientname"] = "patientname cannot be blank."
+    else:
+        form.data["patientname"] = form_topic
+
+    return len(form.errors) == 0

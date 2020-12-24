@@ -14,6 +14,11 @@
     <div class="control">
       <input type="text" name="patientname" class="input" />
     </div>
+    {% if 'patientname' in values.errors %}
+    <p class="help has-background-warning">
+        {{ values.errors['patientname'] }}
+    </p>
+    {% endif %}
   </div>
   <div class="field">
     <label for="patientsurname" class="label">patientsurname</label>
