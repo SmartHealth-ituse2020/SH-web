@@ -6,7 +6,7 @@ import psycopg2 as dbapi2
 
 INIT_STATEMENTS = [
    '''
-	CREATE TABLE IF NOT EXISTS public.admin
+	CREATE TABLE IF NOT EXISTS ADMIN
 	(
 		adminid integer NOT NULL,
 		adminname character varying(10) COLLATE pg_catalog."default" NOT NULL,
@@ -15,7 +15,7 @@ INIT_STATEMENTS = [
 		adminpassword character varying(20) COLLATE pg_catalog."default" NOT NULL,
 		CONSTRAINT admin_pkey PRIMARY KEY (adminid)
 	);
-	CREATE TABLE IF NOT EXISTS public.appointment
+	CREATE TABLE IF NOT EXISTS APPOINTMENT
 	(
 		appointmentid integer NOT NULL,
 		predictionresult boolean,
@@ -26,7 +26,7 @@ INIT_STATEMENTS = [
 		relateddoctor integer,
 		CONSTRAINT appointment_pkey PRIMARY KEY (appointmentid)
 	);
-	CREATE TABLE IF NOT EXISTS public.doctor
+	CREATE TABLE IF NOT EXISTS DOCTOR
 	(
 		doctorid integer NOT NULL,
 		doctorname character varying(10) COLLATE pg_catalog."default" NOT NULL,
@@ -40,7 +40,7 @@ INIT_STATEMENTS = [
 		doctornid integer,
 		CONSTRAINT doctor_pkey PRIMARY KEY (doctorid)
 	);
-	CREATE TABLE IF NOT EXISTS public.patient
+	CREATE TABLE IF NOT EXISTS PATIENT
 	(
 		patientid integer NOT NULL,
 		patientname character varying(10) COLLATE pg_catalog."default" NOT NULL,
@@ -63,17 +63,17 @@ INIT_STATEMENTS = [
 		emr_appoinment integer,
 		CONSTRAINT emr_data_pkey PRIMARY KEY (emr_id),
 		CONSTRAINT doctor_fkey FOREIGN KEY (uploader_doctorid)
-			REFERENCES public.admin (adminid) MATCH SIMPLE
+			REFERENCES DOCTOR (doctorid) MATCH SIMPLE
 			ON UPDATE NO ACTION
 			ON DELETE NO ACTION
 			NOT VALID,
 		CONSTRAINT patient_fkey FOREIGN KEY (related_patientid)
-			REFERENCES public.patient (patientid) MATCH SIMPLE
+			REFERENCES PATIENT (patientid) MATCH SIMPLE
 			ON UPDATE NO ACTION
 			ON DELETE NO ACTION
 			NOT VALID
 	);
-	CREATE TABLE IF NOT EXISTS public.deeplearningmodel
+	CREATE TABLE IF NOT EXISTS DLMODEL
 	(
 		modelversion integer NOT NULL,
 		modelweights integer,
