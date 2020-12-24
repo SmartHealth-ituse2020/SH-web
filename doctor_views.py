@@ -43,25 +43,7 @@ def add_patient_page_doctor():
         form_patientage = request.form["patientage"]
         form_patientlogcode = request.form["patientlogcode"]
 
-        statements =\
-            [
-                '''INSERT INTO "patient" (patientid,patientname,patientsurname,patientgender,patientage,patientlogcode)\
-                VALUES (%s,'%s','%s','%s','%s','%s');''' % (
-                    form_patientid,
-                    form_patientname,
-                    form_patientsurname,
-                    form_patientgender,
-                    form_patientage,
-                    form_patientlogcode)
-            ]
-
-        url = DATABASE_URL
-        with dbapi2.connect(url) as connection:
-            cursor = connection.cursor()
-            for statement in statements:
-                cursor.execute(statement)
-
-            cursor.close()
+        dboperations.add_newpatient(DATABASE_URL, form_patientid, form_patientname, form_patientsurname, form_patientgender, form_patientage, form_patientlogcode)
         return redirect(url_for("home_page_doctor"))
 
 
