@@ -29,3 +29,20 @@ def add_newpatient(url, form_patientid, form_patientname, form_patientsurname, f
         cursor.execute(
             f"INSERT INTO patient VALUES ({form_patientid},'{form_patientname}','{form_patientsurname}','{form_patientgender}',{form_patientage},{form_patientlogcode});")
         cursor.close()
+
+
+def add_newdoctor(url, form_doctorid, form_doctorname, form_doctorsurname, \
+    form_doctorpassword, form_doctorusername, form_doctorhospital, form_doctortitle, form_doctorprofession, form_added_by, form_doctornid):
+    with dbapi2.connect(url) as connection:
+        cursor = connection.cursor()
+        cursor.execute(
+            f"INSERT INTO patient VALUES ({form_doctorid},'{form_doctorname}','{form_doctorsurname}','{form_doctorpassword}',\
+			'{form_doctorusername}','{form_doctorhospital}','{form_doctortitle}','{form_doctorprofession}','{form_added_by}',{form_doctornid});")
+        cursor.close()
+
+
+# def remove_patient(url, patientid):
+#     with dbapi2.connect(url) as connection:
+#         cursor = connection.cursor()
+#         cursor.execute("DELETE FROM patient WHERE patientid = {patientid};")
+#         cursor.close()
