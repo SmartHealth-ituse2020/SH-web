@@ -1,5 +1,7 @@
 {% extends "layout_login.html" %}
+
 {% block title %}Home - Doctor{% endblock %}
+
 {% block content %}
 <div class="level-right">
     <a class="button is-rounded is-ghost is-medium level-item">
@@ -14,7 +16,7 @@
 
             <div class="block" style="margin-bottom: 3rem; margin-top: 1.5rem">
                 <div class="columns is-centered">
-                    <img src="/static/smartHealth_logo-with-text.jpg">
+                    <img src="{{url_for('static', filename='images/smartHealth_logo-with-text.jpg')}}">
                 </div>
             </div>
             <div class="block" style="margin-bottom: 1.5rem; margin-top: 1.5rem">

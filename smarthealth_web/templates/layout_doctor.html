@@ -5,10 +5,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{% block title %}{% endblock %}</title>
-  <link rel="shortcut icon" href="/static/smartHealth_logo-only.png" />
+  <link rel="shortcut icon" href="{{url_for('static', filename='images/smartHealth_logo-only.png')}}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="{{ url_for('static', filename='smartHealth.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/smartHealth.css') }}" />
 </head>
 
 <body>
@@ -16,7 +16,7 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <a class="navbar-item" href="{{ url_for('home_page') }}">
-          <img src="/static/smartHealth_logo-with-text.jpg">
+          <img src="{{url_for('static', filename='images/smartHealth_logo-with-text.jpg')}}">
         </a>
       </div>
       <div class="navbar-menu">

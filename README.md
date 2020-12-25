@@ -8,6 +8,14 @@ Electronic medical records (EMRs) took the place of paper to store the healthcar
 ## Install
 
 * Clone project
+* Create virtual environment `python3 -m venv venv`
+* Activate virtual environment 
+  * For GNU/Linux: `source venv/bin/activate`
+  * For Windows: `.\venv\Scripts\activate`
+* Install requirements `pip install -r requirements.txt`
+* Run settings.py `python settings.py`
+* Initialize database if not initialized `python initdb.py`
+* Run server `flask run`
 
 
 ## License

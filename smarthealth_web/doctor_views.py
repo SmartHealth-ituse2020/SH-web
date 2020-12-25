@@ -1,8 +1,8 @@
 from flask import request, redirect, url_for
-from forms import DoctorLoginForm, AddPatientForm
+from smarthealth_web.forms import DoctorLoginForm, AddPatientForm
 from flask import render_template
 from decouple import config
-import dboperations
+from smarthealth_web import dboperations
 
 DATABASE_URL = config('DATABASE_URL')
 
