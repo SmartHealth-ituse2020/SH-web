@@ -1,7 +1,8 @@
 import psycopg2 as dbapi2
-import os
+from decouple import config
 
-DATABASE_URL = os.environ['DATABASE_URL']
+# DATABASE_URL = os.environ.get('DATABASE_URL')
+DATABASE_URL = config('DATABASE_URL')
 
 
 def query(url, table_name):
