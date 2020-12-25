@@ -2,6 +2,7 @@
 {% block title %}Add Personnel{% endblock %}
 {% block content %}
 <h1 class="title">New Patient</h1>
+    <!--
 <form action="" method="post" name="patient_add">
   <div class="field">
     <label for="patientid" class="label">patientid</label>
@@ -14,11 +15,11 @@
     <div class="control">
       <input type="text" name="patientname" class="input" />
     </div>
-    {% if 'patientname' in values.errors %}
+    {# {% if 'patientname' in values.errors %} #}
     <p class="help has-background-warning">
-        {{ values.errors['patientname'] }}
+        {# {{ values.errors['patientname'] }} #}
     </p>
-    {% endif %}
+    {# {% endif %} #}
   </div>
   <div class="field">
     <label for="patientsurname" class="label">patientsurname</label>
@@ -50,4 +51,21 @@
     </div>
   </div>
 </form>
+-->
+
+
+
+
+
+{% from "macro.html" import render_field %}
+
+<form action="" class="box" method="post" name="patient_add">
+    {{ form.hidden_tag() }}
+    {{ render_field(form.patient_id, placeholder="1FDA3532XX", label_class="label", icon="") }}<br>
+    {{ render_field(form.patient_name, placeholder="Donald", label_class="label", icon="") }}<br>
+    {{ render_field(form.patient_surname, placeholder="Trump", label_class="label", icon="") }}<br>
+    {{ render_field(form.patient_gender, label_class="label", icon="") }}<br>
+    {{ render_field(form.patient_age, label_class="label", icon="") }}<br>
+    {{ render_field(form.patient_logcode, placeholder="PW18sgax.", label_class="label", icon="") }}<br>
+    <p><input class="button is-success" type="submit" value="Add Patient"></p></form>
 {% endblock %}

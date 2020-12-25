@@ -27,7 +27,7 @@ def add_newpatient(url, form_patientid, form_patientname, form_patientsurname, f
     with dbapi2.connect(url) as connection:
         cursor = connection.cursor()
         cursor.execute(
-            f"INSERT INTO patient VALUES ({form_patientid},'{form_patientname}','{form_patientsurname}','{form_patientgender}',{form_patientage},{form_patientlogcode});")
+            f"INSERT INTO patient VALUES ({form_patientid},'{form_patientname}','{form_patientsurname}','{form_patientgender}',{form_patientage},'{form_patientlogcode}');")
         cursor.close()
 
 

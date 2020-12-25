@@ -13,11 +13,11 @@ app.config['SECRET_KEY'] = SECRET_KEY
 # 246-115-40.eu-west-1.compute.amazonaws.com:5432/d4qj8s0lt8sev8"
 # app.config['DATABASE_URL'] = DATABASE_URL
 
-app.add_url_rule("/doctor", methods=["GET", "POST"], view_func=doctor_views.home_page_doctor)
+app.add_url_rule("/doctor", methods=["GET", "POST"], view_func=doctor_views.home_page)
 app.add_url_rule("/", view_func=views.login_page)
 app.add_url_rule("/login", view_func=views.login_page)
-app.add_url_rule("/login/doctor", methods=["GET", "POST"], view_func=doctor_views.login_page_doctor)
-app.add_url_rule("/doctor/add_patient", methods=["GET", "POST"], view_func=doctor_views.add_patient_page_doctor)
+app.add_url_rule("/login/doctor", methods=["GET", "POST"], view_func=doctor_views.login)
+app.add_url_rule("/doctor/add_patient", methods=["GET", "POST"], view_func=doctor_views.add_patient)
 
 if __name__ == "__main__":
     app.run()

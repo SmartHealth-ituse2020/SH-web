@@ -1,5 +1,5 @@
 from flask import request, redirect, url_for
-from forms import DoctorLoginForm
+from forms import DoctorLoginForm, AddPatientForm
 from flask import render_template
 from decouple import config
 import dboperations
@@ -7,24 +7,44 @@ import dboperations
 DATABASE_URL = config('DATABASE_URL')
 
 
-def home_page_doctor():
+def home_page():
     rows = dboperations.query(DATABASE_URL, "patient")
     # rows={"...", "...", "...", "...", "...", "..."}
     return render_template("home_doctor.html", rows=sorted(rows), len=len(rows))
 
 
-def login_page_doctor():
+def login():
     form = DoctorLoginForm()
     if form.validate_on_submit():
         # Add user validation code here
         # user = User.query.filter_by(email=form.email.data).first()
         # if user is not None and user.verify_password(form.password.data):
         # login_user(None)
-        return redirect(url_for("home_page_doctor"))  # if successful
+        return redirect(url_for("home_page"))  # if successful
     return render_template('login_doctor.html', form=form)
 
 
-def add_patient_page_doctor():
+def add_patient():
+    form = AddPatientForm()
+    if form.validate_on_submit():
+        # Check if any patient exists with given ID
+        # Dont add again if patient exists
+        dboperations.add_newpatient(
+            DATABASE_URL,
+            form.patient_id.data,
+            form.patient_name.data,
+            form.patient_surname.data,
+            form.patient_gender.data,
+            form.patient_age.data,
+            form.patient_logcode.data
+        )
+
+        return redirect(url_for("home_page"))
+    return render_template('patient_add.html', form=form)
+
+
+"""
+def add_patient():
 
     if request.method == "GET":
         values = {"patientname": ""}
@@ -52,6 +72,7 @@ def add_patient_page_doctor():
         )
 
         return redirect(url_for("home_page_doctor"))
+"""
 
 
 def validate_patient_form(form):
