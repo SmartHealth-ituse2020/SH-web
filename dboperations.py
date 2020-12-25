@@ -31,8 +31,19 @@ def add_newpatient(url, form_patientid, form_patientname, form_patientsurname, f
         cursor.close()
 
 
-def add_newdoctor(url, form_doctorid, form_doctorname, form_doctorsurname, \
-    form_doctorpassword, form_doctorusername, form_doctorhospital, form_doctortitle, form_doctorprofession, form_added_by, form_doctornid):
+def add_newdoctor(
+        url,
+        form_doctorid,
+        form_doctorname,
+        form_doctorsurname,
+        form_doctorpassword,
+        form_doctorusername,
+        form_doctorhospital,
+        form_doctortitle,
+        form_doctorprofession,
+        form_added_by,
+        form_doctornid
+):
     with dbapi2.connect(url) as connection:
         cursor = connection.cursor()
         cursor.execute(
