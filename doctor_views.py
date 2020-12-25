@@ -2,7 +2,6 @@ from flask import request, redirect, url_for
 from forms import DoctorLoginForm
 from flask import render_template
 from decouple import config
-import psycopg2 as dbapi2
 import dboperations
 
 DATABASE_URL = config('DATABASE_URL')
@@ -42,7 +41,16 @@ def add_patient_page_doctor():
         form_patientage = request.form["patientage"]
         form_patientlogcode = request.form["patientlogcode"]
 
-        dboperations.add_newpatient(DATABASE_URL, form_patientid, form_patientname, form_patientsurname, form_patientgender, form_patientage, form_patientlogcode)
+        dboperations.add_newpatient(
+            DATABASE_URL,
+            form_patientid,
+            form_patientname,
+            form_patientsurname,
+            form_patientgender,
+            form_patientage,
+            form_patientlogcode
+        )
+
         return redirect(url_for("home_page_doctor"))
 
 
