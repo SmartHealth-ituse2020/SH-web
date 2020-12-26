@@ -15,16 +15,16 @@
   <header>
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
-        <a class="navbar-item" href="{{ url_for('home_page') }}">
+        <a class="navbar-item" href="{{ url_for('doctor.home_page') }}">
           <img src="{{url_for('static', filename='images/smartHealth_logo-with-text.jpg')}}">
         </a>
       </div>
       <div class="navbar-menu">
         <div class="navbar-start">
-          <a class="navbar-item" href="{{ url_for('home_page') }}">
+          <a class="navbar-item" href="{{ url_for('doctor.home_page') }}">
             Home
           </a>
-          <a class="navbar-item" href="{{ url_for('add_patient') }}">
+          <a class="navbar-item" href="{{ url_for('doctor.add_patient') }}">
             Add New Patient
           </a>
         </div>

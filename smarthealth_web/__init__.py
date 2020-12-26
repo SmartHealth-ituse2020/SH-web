@@ -1,6 +1,6 @@
 from flask import Flask
 import os
-from smarthealth_web import doctor_views, views
+from smarthealth_web import views, doctor
 
 
 def create_app(test_config=None):
@@ -10,10 +10,10 @@ def create_app(test_config=None):
     app.config['DEBUG'] = True
     app.config['SECRET_KEY'] = 'dev'
 
-    app.add_url_rule("/doctor", methods=["GET", "POST"], view_func=doctor_views.home_page)
+    # register doctor blueprint
+    app.register_blueprint(doctor.bp)
+
     app.add_url_rule("/", view_func=views.login_page)
     app.add_url_rule("/login", view_func=views.login_page)
-    app.add_url_rule("/login/doctor", methods=["GET", "POST"], view_func=doctor_views.login)
-    app.add_url_rule("/doctor/add_patient", methods=["GET", "POST"], view_func=doctor_views.add_patient)
 
     return app
