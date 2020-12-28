@@ -18,12 +18,10 @@ class DoctorLoginForm(FlaskForm):
 
 
 class AddPatientForm(FlaskForm):
-    patient_id = StringField('Patient ID', validators=[DataRequired()], render_kw={'class': 'input'})
     patient_name = StringField('Patient Name', validators=[DataRequired()], render_kw={'class': 'input'})
     patient_surname = StringField('Patient Surname', validators=[DataRequired()], render_kw={'class': 'input'})
     patient_gender = RadioField('Patient Gender', validators=[DataRequired()], choices=["Male", "Female", "Others"])
     patient_age = IntegerField('Patient Age', validators=[DataRequired()], render_kw={'class': 'input'})
-    patient_logcode = StringField('Log Code', validators=[DataRequired()], render_kw={'class': 'input'})
 
     def __init__(self, *args, **kwargs):
         super(AddPatientForm, self).__init__(*args, **kwargs)

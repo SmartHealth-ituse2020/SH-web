@@ -15,7 +15,6 @@ DATABASE_URL = config('DATABASE_URL')
 @bp.route('/dashboard', methods=('GET',))
 def home_page():
     rows = dboperations.query(DATABASE_URL, "patient")
-    # rows={"...", "...", "...", "...", "...", "..."}
     return render_template("doctor/doctor_dashboard.html", rows=sorted(rows), len=len(rows))
 
 
@@ -40,12 +39,10 @@ def add_patient():
         try:
             dboperations.add_newpatient(
                 DATABASE_URL,
-                form.patient_id.data,
                 form.patient_name.data,
                 form.patient_surname.data,
                 form.patient_gender.data,
                 form.patient_age.data,
-                form.patient_logcode.data
             )
         except dpapi2.errors.UniqueViolation:
             return render_template('doctor/add_patient.html', form=form, errors="Patient ID already exists.")

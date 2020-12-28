@@ -33,11 +33,11 @@ def fetch_table(url, columns, table_name, condition):
         return rows
 
 
-def add_newpatient(url, form_patientid, form_patientname, form_patientsurname, form_patientgender, form_patientage, form_patientlogcode):
+def add_newpatient(url, form_patientname, form_patientsurname, form_patientgender, form_patientage):
     with dbapi2.connect(url) as connection:
         cursor = connection.cursor()
         cursor.execute(
-            f"INSERT INTO patient VALUES ({form_patientid},'{form_patientname}','{form_patientsurname}','{form_patientgender}',{form_patientage},'{form_patientlogcode}');")
+            f"INSERT INTO patient VALUES (DEFAULT,'{form_patientname}','{form_patientsurname}','{form_patientgender}',{form_patientage}, random()* (900000-100000 + 1) + 100000)")
         cursor.close()
 
 
