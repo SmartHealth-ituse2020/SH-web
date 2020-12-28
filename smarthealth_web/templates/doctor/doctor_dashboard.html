@@ -3,36 +3,46 @@
 {% block content %}
 <h1 class="title">Home</h1>
 
-<table class="table is-narrow is-striped is-hoverable">
+<table class="table is-narrow is-striped is-hoverable" width="100%">
 
-    <tr>
-        <th>patientid</th>
-        <th>patientname</th>
-        <th>patientsurname</th>
-        <th>patientgender</th>
-        <th>patientage</th>
-        <th>patientlogcode</th>
-        <th>createdate</th>
-        <th></th>
-    </tr>
+    <thead>
+        <tr>
+            <th>patientid</th>
+            <th>patientname</th>
+            <th>patientsurname</th>
+            <th>patientgender</th>
+            <th>patientage</th>
+            <th>patientlogcode</th>
+            <th>createdate</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
 {% for i in range(0,len) %}
-    <tr>
-        <td>{{ rows[i][0] }}</td>
-        <td>{{ rows[i][1] }}</td>
-        <td>{{ rows[i][2] }}</td>
-        <td>{{ rows[i][3] }}</td>
-        <td>{{ rows[i][4] }}</td>
-        <td>{{ rows[i][5] }}</td>
-        <td>{{ rows[i][6] }}</td>
-        <td>
-            <a class="button is-link">
-                <span class="icon is-small is-left">
-                  <i class="fa fa-edit"></i>
-                </span></a>
-        </td>
-    </tr>
-{%endfor%} 
+        <tr>
+            <td>{{ rows[i][0] }}</td>
+            <td>{{ rows[i][1] }}</td>
+            <td>{{ rows[i][2] }}</td>
+            <td>{{ rows[i][3] }}</td>
+            <td>{{ rows[i][4] }}</td>
+            <td>{{ rows[i][5] }}</td>
+            <td>{{ rows[i][6] }}</td>
+            <td>
+                <a class="button is-link">
+                    <span class="icon is-small is-left">
+                    <i class="fa fa-edit"></i>
+                    </span></a>
+            </td>
+        </tr>
+{%endfor%}
+    </tbody> 
 </table>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="{{ url_for('static', filename='js/dataTables.bulma.min.js') }}"></script>
+<script>
+    $('.table').DataTable();
+</script>
 <div class="field is-grouped is-grouped-centered">
     <span class="navbar-item">
             <a class="button is-link">...</a>
