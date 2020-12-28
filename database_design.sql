@@ -39,7 +39,8 @@ CREATE TABLE IF NOT EXISTS PATIENT
     patientsurname character varying(10) COLLATE pg_catalog."default",
     patientgender character varying(10) COLLATE pg_catalog."default",
     patientage integer,
-    patientlogcode integer NOT NULL
+    patientlogcode integer NOT NULL,
+    cratetime timestamp
 );
 
 CREATE TABLE IF NOT EXISTS public.emr_data
