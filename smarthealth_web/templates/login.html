@@ -4,28 +4,30 @@
 
 {% block content %}
 <div class="level-right">
-    <a class="button is-rounded is-ghost is-medium level-item">
-        <span class="icon is-small is-left">
-            <i class="fa fa-cog"></i>
-        </span>
-    </a>
+    <div class="columns is-mobile">
+        <a class="button is-rounded is-ghost is-medium level-item">
+            <span class="icon is-small is-left">
+                <i class="fa fa-cog"></i>
+            </span>
+        </a>
+    </div>
 </div>
-<div class="columns is-centered">
+<div class="columns is-centered is-mobile">
     <div class="column is-one-third">
         <div class="box">
 
             <div class="block" style="margin-bottom: 3rem; margin-top: 1.5rem">
-                <div class="columns is-centered">
+                <div class="columns is-centered is-mobile">
                     <img src="{{url_for('static', filename='images/smartHealth_logo-with-text.jpg')}}">
                 </div>
             </div>
             <div class="block" style="margin-bottom: 1.5rem; margin-top: 1.5rem">
-                <div class="columns is-centered">
+                <div class="columns is-centered is-mobile">
                     <a class="button is-link" href="{{ url_for('doctor.login') }}">Doctor Login</a>
                 </div>
             </div>
             <div class="block" style="margin-bottom: 1.5rem">
-                <div class="columns is-centered">
+                <div class="columns is-centered is-mobile">
                     <a class="button is-link">Patient Login</a>
                 </div>
             </div>
