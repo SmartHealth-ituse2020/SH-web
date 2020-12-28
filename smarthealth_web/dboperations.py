@@ -23,6 +23,16 @@ def query_where(url, table_name, condition):
         return rows
 
 
+def fetch_table(url, columns, table_name, condition):
+    with dbapi2.connect(url) as connection:
+        cursor = connection.cursor()
+        cursor.execute(
+            f"SELECT {columns} FROM {table_name} WHERE {condition};")
+        rows = cursor.fetchall()
+        cursor.close()
+        return rows
+
+
 def add_newpatient(url, form_patientid, form_patientname, form_patientsurname, form_patientgender, form_patientage, form_patientlogcode):
     with dbapi2.connect(url) as connection:
         cursor = connection.cursor()
@@ -48,7 +58,7 @@ def add_newdoctor(
         cursor = connection.cursor()
         cursor.execute(
             f"INSERT INTO patient VALUES ({form_doctorid},'{form_doctorname}','{form_doctorsurname}','{form_doctorpassword}',\
-			'{form_doctorusername}','{form_doctorhospital}','{form_doctortitle}','{form_doctorprofession}','{form_added_by}',{form_doctornid});")
+            '{form_doctorusername}','{form_doctorhospital}','{form_doctortitle}','{form_doctorprofession}','{form_added_by}',{form_doctornid});")
         cursor.close()
 
 
