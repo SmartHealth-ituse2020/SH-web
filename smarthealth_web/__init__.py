@@ -1,6 +1,6 @@
 from flask import Flask
 import os
-from smarthealth_web import views, doctor, patient
+from smarthealth_web import views, doctor, patient, admin
 
 
 def create_app(test_config=None):
@@ -13,6 +13,7 @@ def create_app(test_config=None):
     # register doctor blueprint
     app.register_blueprint(doctor.bp)
     app.register_blueprint(patient.bp)
+    app.register_blueprint(admin.bp)
 
     app.add_url_rule("/", view_func=views.login_page)
     app.add_url_rule("/login", view_func=views.login_page)
