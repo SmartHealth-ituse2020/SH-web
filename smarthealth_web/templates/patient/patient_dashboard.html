@@ -1,0 +1,47 @@
+{% extends "patient/patient_layout.html" %}
+{% block title %}Home - Patient{% endblock %}
+{% block content %}
+<h1 class="title">Home</h1>
+
+<table class="table is-narrow is-striped is-hoverable" width="100%">
+
+    <thead>
+        <tr>
+            <th>appointmentid</th>
+            <th>predictionresult</th>
+            <th>doctordiagnosis</th>
+            <th>diagnosiscomment</th>
+            <th>appointmentdate</th>
+            <th>relatedpatient</th>
+            <th>relateddoctor</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+{% for i in range(0,len) %}
+        <tr>
+            <td>{{ rows[i][0] }}</td>
+            <td>{{ rows[i][1] }}</td>
+            <td>{{ rows[i][2] }}</td>
+            <td>{{ rows[i][3] }}</td>
+            <td>{{ rows[i][4] }}</td>
+            <td>{{ rows[i][5] }}</td>
+            <td>{{ rows[i][6] }}</td>
+            <td>
+                <a class="button is-link">
+                    <span class="icon is-small is-left">
+                    <i class="fa fa-info"></i>
+                    </span></a>
+            </td>
+        </tr>
+{%endfor%}
+    </tbody> 
+</table>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="{{ url_for('static', filename='js/dataTables.bulma.min.js') }}"></script>
+<script>
+    $('.table').DataTable();
+</script>
+
+{% endblock %}

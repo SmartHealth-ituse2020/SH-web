@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="shortcut icon" href="{{url_for('static', filename='images/smartHealth_logo-only.png')}}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.1/css/all.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/smartHealth.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dataTables.bulma.min.css') }}" />
+</head>
+
+<body>
+  <header>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="{{ url_for('patient.home_page') }}">
+          <img src="{{url_for('static', filename='images/smartHealth_logo-with-text.jpg')}}">
+        </a>
+      </div>
+      <div class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="{{ url_for('patient.home_page') }}">
+            Home
+          </a>
+        </div>
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-warning" href="{{ url_for('login_page') }}">
+                Log out
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section class="section">
+      <div class="content">
+        {% block content %}{% endblock %}
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="content">
+      <small>&copy; 2020, Smart Health</small>
+    </div>
+  </footer>
+</body>
+
+</html>

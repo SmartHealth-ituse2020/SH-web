@@ -1,6 +1,6 @@
 {% extends "layout_login.html" %}
 
-{% block title %}Home - Doctor{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block content %}
 <div class="level-right">
@@ -28,7 +28,7 @@
             </div>
             <div class="block" style="margin-bottom: 1.5rem">
                 <div class="columns is-centered is-mobile">
-                    <a class="button is-link">Patient Login</a>
+                    <a class="button is-link" href="{{ url_for('patient.login') }}">Patient Login</a>
                 </div>
             </div>
         </div>
