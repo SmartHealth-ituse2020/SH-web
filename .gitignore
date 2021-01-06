@@ -8,3 +8,5 @@ env/
 
 .env*
 .db_url
+.coverage
+

@@ -16,6 +16,7 @@ class DoctorLoginForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super(DoctorLoginForm, self).__init__(*args, **kwargs)
 
+
 class PatientLoginForm(FlaskForm):
     national_id = StringField('National ID',
                               validators=[DataRequired(), Length(8, 15)],
@@ -28,6 +29,7 @@ class PatientLoginForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super(PatientLoginForm, self).__init__(*args, **kwargs)
+
 
 class AdminLoginForm(FlaskForm):
     national_id = StringField('National ID',

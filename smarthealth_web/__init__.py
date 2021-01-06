@@ -1,7 +1,6 @@
 from smarthealth_web import views, doctor, patient, admin
 from decouple import config
 from flask import Flask
-import os
 
 
 def create_app(test_config=False, test_db=None):
@@ -16,10 +15,10 @@ def create_app(test_config=False, test_db=None):
     if test_config:
         app.config['TESTING'] = True
         app.config['DEBUG'] = False
+        app.config['WTF_CSRF_ENABLED'] = False
         app.config['DATABASE'] = test_db
         if test_db is None:
             raise Exception("Test database url must be given.")
-
 
     # register doctor blueprint
     app.register_blueprint(doctor.bp)

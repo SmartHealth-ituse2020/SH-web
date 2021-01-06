@@ -35,8 +35,8 @@ CREATE TABLE IF NOT EXISTS DOCTOR
 CREATE TABLE IF NOT EXISTS PATIENT
 (
     patientid SERIAL PRIMARY KEY,
-    patientname character varying(10) COLLATE pg_catalog."default" NOT NULL,
-    patientsurname character varying(10) COLLATE pg_catalog."default",
+    patientname character varying(40) COLLATE pg_catalog."default" NOT NULL,
+    patientsurname character varying(40) COLLATE pg_catalog."default",
     patientgender character varying(10) COLLATE pg_catalog."default",
     patientage integer,
     patientlogcode integer NOT NULL,

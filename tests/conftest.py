@@ -11,11 +11,11 @@ with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'r') as f:
 
 @pytest.fixture
 def app():
-    db_path = config('DATABASE_URL')
+    db_path = config('TEST_DATABASE_URL')
     app = create_app(test_config=True, test_db=db_path)
 
     with app.app_context():
-        dbinit.initialize()
+        dbinit.initialize(delete=True)
         conn = dboperations.get_db()
         cur = conn.cursor()
         cur.execute(_data_sql)
