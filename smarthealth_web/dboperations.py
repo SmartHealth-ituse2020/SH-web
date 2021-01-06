@@ -1,11 +1,9 @@
 import psycopg2 as dbapi2
-from decouple import config
-
-# DATABASE_URL = os.environ.get('DATABASE_URL')
-DATABASE_URL = config('DATABASE_URL')
+from flask import current_app, g
 
 
-def query(url, table_name):
+def query(table_name):
+    url = current_app.config['DATABASE']
     with dbapi2.connect(url) as connection:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM %s" % (table_name))
@@ -14,7 +12,8 @@ def query(url, table_name):
         return rows
 
 
-def query_where(url, table_name, condition):
+def query_where(table_name, condition):
+    url = current_app.config['DATABASE']
     with dbapi2.connect(url) as connection:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM %s WHERE %s;" % (table_name, condition))
@@ -23,7 +22,8 @@ def query_where(url, table_name, condition):
         return rows
 
 
-def fetch_table(url, columns, table_name, condition):
+def fetch_table(columns, table_name, condition):
+    url = current_app.config['DATABASE']
     with dbapi2.connect(url) as connection:
         cursor = connection.cursor()
         cursor.execute(
@@ -33,33 +33,37 @@ def fetch_table(url, columns, table_name, condition):
         return rows
 
 
-def add_newpatient(url, form_patientname, form_patientsurname, form_patientgender, form_patientage):
+def add_newpatient(p_name, p_surname, p_gender, p_age):
+    url = current_app.config['DATABASE']
     with dbapi2.connect(url) as connection:
         cursor = connection.cursor()
         cursor.execute(
-            f"INSERT INTO patient VALUES (DEFAULT,'{form_patientname}','{form_patientsurname}','{form_patientgender}',{form_patientage}, random()* (900000-100000 + 1) + 100000, current_timestamp)")
+            f"INSERT INTO patient VALUES (DEFAULT,'{p_name}','{p_surname}','{p_gender}',{p_age}, random()*(900000-100000 + 1) + 100000, current_timestamp)")
         cursor.close()
 
 
-def add_newdoctor(
-        url,
-        form_doctorid,
-        form_doctorname,
-        form_doctorsurname,
-        form_doctorpassword,
-        form_doctorusername,
-        form_doctorhospital,
-        form_doctortitle,
-        form_doctorprofession,
-        form_added_by,
-        form_doctornid
-):
+def add_newdoctor(d_id, d_name, d_surname, d_password, d_username, d_hospital, d_title, d_profession, d_addedby, d_nid):
+    url = current_app.config['DATABASE']
     with dbapi2.connect(url) as connection:
         cursor = connection.cursor()
         cursor.execute(
-            f"INSERT INTO patient VALUES ({form_doctorid},'{form_doctorname}','{form_doctorsurname}','{form_doctorpassword}',\
-            '{form_doctorusername}','{form_doctorhospital}','{form_doctortitle}','{form_doctorprofession}','{form_added_by}',{form_doctornid});")
+            f"INSERT INTO patient VALUES ({d_id},'{d_name}','{d_surname}','{d_password}', '{d_username}','{d_hospital}','{d_title}','{d_profession}','{d_addedby}',{d_nid});"
+        )
         cursor.close()
+
+
+def get_db():
+    url = current_app.config['DATABASE']
+    if 'db' not in g:
+        g.db = dbapi2.connect(url)
+    return g.db
+
+
+def close_db():
+    db = g.pop('db', None)
+
+    if db is not None:
+        db.close()
 
 
 # def remove_patient(url, patientid):

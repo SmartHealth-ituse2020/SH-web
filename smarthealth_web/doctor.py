@@ -14,7 +14,7 @@ DATABASE_URL = config('DATABASE_URL')
 
 @bp.route('/dashboard', methods=('GET',))
 def home_page():
-    rows = dboperations.query(DATABASE_URL, "patient")
+    rows = dboperations.query(table_name="patient")
     return render_template("doctor/doctor_dashboard.html", rows=sorted(rows), len=len(rows))
 
 
@@ -38,7 +38,6 @@ def add_patient():
         # Dont add again if patient exists
         try:
             dboperations.add_newpatient(
-                DATABASE_URL,
                 form.patient_name.data,
                 form.patient_surname.data,
                 form.patient_gender.data,

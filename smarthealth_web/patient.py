@@ -15,7 +15,7 @@ DATABASE_URL = config('DATABASE_URL')
 @bp.route('/dashboard', methods=('GET',))
 def home_page():
     patientid="1"
-    rows = dboperations.query_where(DATABASE_URL, "appointment", "relatedpatient='"+patientid+"'")
+    rows = dboperations.query_where("appointment", f"relatedpatient='{patientid}'")
     return render_template("patient/patient_dashboard.html", rows=sorted(rows), len=len(rows))
 
 
