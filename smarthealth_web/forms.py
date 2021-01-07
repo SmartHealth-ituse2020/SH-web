@@ -10,10 +10,10 @@ def validate_nationalid(form, field):
 
 class DoctorLoginForm(FlaskForm):
 
-    national_id = StringField('National ID',
-                              validators=[DataRequired(), Length(8, 15)],
-                              render_kw={'class': 'input'}
-                              )
+    username = StringField('Username',
+                           validators=[DataRequired(), Length(8, 15)],
+                           render_kw={'class': 'input'}
+                           )
 
     password = PasswordField('Password', validators=[DataRequired()], render_kw={'class': 'input'})
     remember_me = BooleanField('Remember me')
