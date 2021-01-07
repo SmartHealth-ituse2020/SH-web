@@ -26,16 +26,16 @@ def login():
         # user = User.query.filter_by(email=form.email.data).first()
         # if user is not None and user.verify_password(form.password.data):
         # login_user(None)
-        d_username = form.username.data
-        d = query_where(table_name="doctor", condition=f"username='{d_username}'")
-        if d:
-            try:
-                lc = form.password.data
-            except ValueError:
-                lc = None
-            if lc == d[0][3]:
-                session["doctor"] = d[0]
-                return redirect(url_for("doctor.home_page"))  # if successful
+        # d_username = form.username.data
+        # d = query_where(table_name="doctor", condition=f"username='{d_username}'")
+        # if d:
+        #    try:
+        #        lc = form.password.data
+        #    except ValueError:
+        #        lc = None
+        #    if lc == d[0][3]:  # add redirect after this confirmation
+        #        session["doctor"] = d[0]
+        return redirect(url_for("doctor.home_page"))
     return render_template('doctor/doctor_login.html', form=form)
 
 
