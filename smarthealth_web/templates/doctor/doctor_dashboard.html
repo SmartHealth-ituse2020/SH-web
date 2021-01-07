@@ -8,6 +8,7 @@
     <thead>
         <tr>
             <th>Patient ID</th>
+            <th>Patient NID</th>
             <th>Patient Name</th>
             <th>Patient Surname</th>
             <th>Gender</th>
@@ -21,6 +22,7 @@
 {% for i in range(0,len) %}
         <tr>
             <td>{{ rows[i][0] }}</td>
+            <td>{{ rows[i][1] }}</td>
             <td>{{ rows[i][2] }}</td>
             <td>{{ rows[i][3] }}</td>
             <td>{{ rows[i][4] }}</td>
