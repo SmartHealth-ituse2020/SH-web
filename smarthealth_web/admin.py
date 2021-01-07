@@ -16,6 +16,7 @@ DATABASE_URL = config('DATABASE_URL')
 def home_page():
     return render_template("admin/admin_dashboard.html")
 
+
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     form = AdminLoginForm()

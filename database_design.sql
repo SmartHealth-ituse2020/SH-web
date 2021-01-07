@@ -1,45 +1,46 @@
 CREATE TABLE IF NOT EXISTS ADMIN
 (
-    adminid SERIAL PRIMARY KEY,
-    adminname character varying(10) COLLATE pg_catalog."default" NOT NULL,
-    adminsurname character varying(10) COLLATE pg_catalog."default",
-    adminusername character varying(20) COLLATE pg_catalog."default" NOT NULL,
-    adminpassword character varying(20) COLLATE pg_catalog."default" NOT NULL
+    id SERIAL PRIMARY KEY,
+    name character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    surname character varying(10) COLLATE pg_catalog."default",
+    username character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    password character varying(20) COLLATE pg_catalog."default" NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS APPOINTMENT
 (
-    appointmentid SERIAL PRIMARY KEY,
-    predictionresult boolean,
-    doctordiagnosis text COLLATE pg_catalog."default",
-    diagnosiscomment text COLLATE pg_catalog."default",
-    appointmentdate date,
-    relatedpatient integer NOT NULL,
-    relateddoctor integer
+    id SERIAL PRIMARY KEY,
+    prediction_result boolean,
+    doctor_diagnosis text COLLATE pg_catalog."default",
+    diagnosis_comment text COLLATE pg_catalog."default",
+    appointment_date date,
+    related_patient integer NOT NULL,
+    related_doctor integer
 );
 
 CREATE TABLE IF NOT EXISTS DOCTOR
 (
-    doctorid SERIAL PRIMARY KEY,
-    doctorname character varying(10) COLLATE pg_catalog."default" NOT NULL,
-    doctorsurname character varying(10) COLLATE pg_catalog."default",
-    doctorpassword character varying(20) COLLATE pg_catalog."default" NOT NULL,
-    doctorusername character varying(20) COLLATE pg_catalog."default" NOT NULL,
-    doctorhospital text COLLATE pg_catalog."default",
-    doctortitle character varying(10) COLLATE pg_catalog."default",
-    doctorprofession character varying(50) COLLATE pg_catalog."default",
+    id SERIAL PRIMARY KEY,
+    name character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    surname character varying(10) COLLATE pg_catalog."default",
+    password character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    username character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    hospital text COLLATE pg_catalog."default",
+    title character varying(10) COLLATE pg_catalog."default",
+    profession character varying(50) COLLATE pg_catalog."default",
     added_by integer NOT NULL,
-    doctornid integer
+    national_id varchar(15)
 );
 
 CREATE TABLE IF NOT EXISTS PATIENT
 (
-    patientid SERIAL PRIMARY KEY,
-    patientname character varying(40) COLLATE pg_catalog."default" NOT NULL,
-    patientsurname character varying(40) COLLATE pg_catalog."default",
-    patientgender character varying(10) COLLATE pg_catalog."default",
-    patientage integer,
-    patientlogcode integer NOT NULL,
+    id SERIAL PRIMARY KEY,
+    national_id varchar(15),
+    name character varying(40) COLLATE pg_catalog."default" NOT NULL,
+    surname character varying(40) COLLATE pg_catalog."default",
+    gender character varying(10) COLLATE pg_catalog."default",
+    age integer,
+    logcode integer NOT NULL,
     cratetime timestamp
 );
 
@@ -54,12 +55,12 @@ CREATE TABLE IF NOT EXISTS public.emr_data
     emr_filepath character varying(250) COLLATE pg_catalog."default" NOT NULL,
     emr_appoinment integer,
     CONSTRAINT doctor_fkey FOREIGN KEY (uploader_doctorid)
-        REFERENCES DOCTOR (doctorid) MATCH SIMPLE
+        REFERENCES DOCTOR (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID,
     CONSTRAINT patient_fkey FOREIGN KEY (related_patientid)
-        REFERENCES PATIENT (patientid) MATCH SIMPLE
+        REFERENCES PATIENT (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID

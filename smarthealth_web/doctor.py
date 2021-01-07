@@ -39,6 +39,7 @@ def add_patient():
         # Dont add again if patient exists
         try:
             dboperations.add_newpatient(
+                form.patient_national_id.data,
                 form.patient_name.data,
                 form.patient_surname.data,
                 form.patient_gender.data,
