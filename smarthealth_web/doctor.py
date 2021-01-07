@@ -34,7 +34,6 @@ def login():
 def add_patient():
     form = AddPatientForm()
     if form.validate_on_submit():
-        print(request.data)
         # Check if any patient exists with given ID
         # Dont add again if patient exists
         try:
