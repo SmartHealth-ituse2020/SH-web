@@ -38,7 +38,7 @@ def add_newpatient(p_nationalid, p_name, p_surname, p_gender, p_age):
     with dbapi2.connect(url) as connection:
         cursor = connection.cursor()
         cursor.execute(
-            f"INSERT INTO patient VALUES (DEFAULT,'{p_nationalid}','{p_name}','{p_surname}','{p_gender}',{p_age}, random()*(900000-100000 + 1) + 100000, current_timestamp)")
+            f"INSERT INTO patient VALUES (DEFAULT,'{p_name}','{p_surname}','{p_gender}',{p_age}, random()*(900000-100000 + 1) + 100000, current_timestamp,'{p_nationalid}')")
         cursor.close()
 
 

@@ -35,13 +35,13 @@ CREATE TABLE IF NOT EXISTS DOCTOR
 CREATE TABLE IF NOT EXISTS PATIENT
 (
     id SERIAL PRIMARY KEY,
-    national_id varchar(15),
     name character varying(40) COLLATE pg_catalog."default" NOT NULL,
     surname character varying(40) COLLATE pg_catalog."default",
     gender character varying(10) COLLATE pg_catalog."default",
     age integer,
     logcode integer NOT NULL,
-    cratetime timestamp
+    cratetime timestamp,
+    national_id varchar(15)
 );
 
 CREATE TABLE IF NOT EXISTS public.emr_data

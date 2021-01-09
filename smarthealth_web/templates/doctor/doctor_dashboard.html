@@ -22,14 +22,14 @@
 {% for i in range(0,len) %}
         <tr>
             <td>{{ rows[i][0] }}</td>
+            <td>{{ rows[i][7] }}</td>
             <td>{{ rows[i][1] }}</td>
             <td>{{ rows[i][2] }}</td>
             <td>{{ rows[i][3] }}</td>
             <td>{{ rows[i][4] }}</td>
             <td>{{ rows[i][5] }}</td>
-            <td>{{ rows[i][6] }}</td>
-            {% if rows[i][7] %}
-                <td>{{ rows[i][7].strftime("%d-%m-%Y %H:%M") }}</td>
+            {% if rows[i][6] %}
+                <td>{{ rows[i][6].strftime("%d-%m-%Y %H:%M") }}</td>
             {% else %}
                 <td>Not specified.</td>
             {% endif %}
