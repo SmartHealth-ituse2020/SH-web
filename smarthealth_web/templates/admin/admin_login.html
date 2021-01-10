@@ -1,12 +1,13 @@
 {% extends "layout_login.html" %}
 {% block title %}Login{% endblock %}
+
 {% block content %}
     {% from "macro.html" import render_field %}
 
 <section class="section">
 	<div class="container has-text-centered">
-	  <h1 class="title is-capitalized">Login</h1>
-	  <p class="subtitle  is-italic">Login/Register operations are coming soon!..</p>
+	  <h1 class="title is-capitalized">Administrator Login</h1>
+	  <p class="subtitle  is-italic">Smarthealth system administration. </p>
 	</div>
 </section>
 <section class="hero">
@@ -15,7 +16,7 @@
         <div class="column is-5-tablet is-4-desktop is-3-widescreen">
           <form action="{{ url_for( 'admin.login') }}" class="box" method="post">
             {{ form.hidden_tag() }}
-            {{ render_field(form.national_id, placeholder="193XXXXXXXX", label_class="label", icon="fa fa-user") }}<br>
+            {{ render_field(form.username, placeholder="admin", label_class="label", icon="fa fa-user") }}<br>
             {{ render_field(form.password, placeholder="Password", label_class="label", icon="fa fa-envelope") }}<br>
             <p><input class="button is-success" type="submit" value="Login"></p>
           </form>
