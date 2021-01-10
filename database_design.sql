@@ -1,10 +1,10 @@
 CREATE TABLE IF NOT EXISTS ADMIN
 (
     id SERIAL PRIMARY KEY,
-    name character varying(10) COLLATE pg_catalog."default" NOT NULL,
-    surname character varying(10) COLLATE pg_catalog."default",
-    username character varying(20) COLLATE pg_catalog."default" NOT NULL,
-    password character varying(20) COLLATE pg_catalog."default" NOT NULL
+    name character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    surname character varying(30) COLLATE pg_catalog."default",
+    username character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    password character varying(100) COLLATE pg_catalog."default" NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS APPOINTMENT
@@ -21,12 +21,12 @@ CREATE TABLE IF NOT EXISTS APPOINTMENT
 CREATE TABLE IF NOT EXISTS DOCTOR
 (
     id SERIAL PRIMARY KEY,
-    name character varying(10) COLLATE pg_catalog."default" NOT NULL,
-    surname character varying(10) COLLATE pg_catalog."default",
-    password character varying(20) COLLATE pg_catalog."default" NOT NULL,
-    username character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    name character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    surname character varying(30) COLLATE pg_catalog."default",
+    password character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    username character varying(30) COLLATE pg_catalog."default" NOT NULL,
     hospital text COLLATE pg_catalog."default",
-    title character varying(10) COLLATE pg_catalog."default",
+    title character varying(50) COLLATE pg_catalog."default",
     profession character varying(50) COLLATE pg_catalog."default",
     added_by integer NOT NULL,
     national_id varchar(15)
@@ -35,8 +35,8 @@ CREATE TABLE IF NOT EXISTS DOCTOR
 CREATE TABLE IF NOT EXISTS PATIENT
 (
     id SERIAL PRIMARY KEY,
-    name character varying(40) COLLATE pg_catalog."default" NOT NULL,
-    surname character varying(40) COLLATE pg_catalog."default",
+    name character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    surname character varying(30) COLLATE pg_catalog."default",
     gender character varying(10) COLLATE pg_catalog."default",
     age integer,
     logcode integer NOT NULL,
