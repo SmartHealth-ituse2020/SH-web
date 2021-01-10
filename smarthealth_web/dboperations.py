@@ -67,13 +67,14 @@ def close_db():
 
 
 def get_admin_by_username(username):
-    statement = "SELECT * FROM admin WHERE adminusername = %s;"
+    statement = "SELECT * FROM admin WHERE username = %s;"
     url = current_app.config['DATABASE']
     with dbapi2.connect(url) as conn:
         with conn.cursor() as cur:
             cur.execute(statement, (username, ))
             u = cur.fetchone()
     return u
+
 
 # def remove_patient(url, patientid):
 #     with dbapi2.connect(url) as connection:

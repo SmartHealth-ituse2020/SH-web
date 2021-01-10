@@ -29,7 +29,7 @@ def login():
 
         u = get_admin_by_username(username)
 
-        if u is not None:
+        if u is None:
             error = "Invalid username or password."
         elif not check_password_hash(u[4], password):
             error = "Invalid username or password."
