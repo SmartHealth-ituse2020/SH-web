@@ -27,5 +27,6 @@ def create_app(test_config=False, test_db=None):
 
     app.add_url_rule("/", view_func=views.login_page)
     app.add_url_rule("/login", view_func=views.login_page)
+    app.add_url_rule("/logout", view_func=views.logout)
 
     return app

@@ -30,3 +30,10 @@ def logout_required(view):
 @logout_required
 def login_page():
     return render_template("login.html")
+
+
+@login_required
+def logout():
+    session.clear()
+    flash("Logged out.")
+    return redirect(url_for("login_page"))
