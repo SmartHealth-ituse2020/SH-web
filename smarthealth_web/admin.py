@@ -1,26 +1,32 @@
-# import functools
-
-from werkzeug.security import check_password_hash, generate_password_hash
-from flask import request, redirect, url_for, session
+import functools
+from werkzeug.security import check_password_hash
+from flask import redirect, url_for, session, flash
 from smarthealth_web.forms import AdminLoginForm
 from smarthealth_web.dboperations import get_admin_by_username
 from flask import render_template, Blueprint
 from decouple import config
-from smarthealth_web import dboperations
-import psycopg2 as dpapi2
+
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')
 DATABASE_URL = config('DATABASE_URL')
 
 
+def admin_login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for("login_page"))
+        elif "user_is_admin" not in session or not session["user_is_admin"]:
+            flash("You are not an admin.")
+            return redirect(url_for("doctor.dashboard"))
+        return view(**kwargs)
+    return wrapped_view
+
+
 @bp.route('/dashboard', methods=('GET',))
+@admin_login_required
 def home_page():
-    if "user_id" not in session:
-        return redirect(url_for("login_page"))
-    elif "user_is_admin" not in session or not session["user_id_admin"]:
-        return redirect(url_for("login_page"))
-    else:
-        return render_template("admin/admin_dashboard.html")
+    return render_template("admin/admin_dashboard.html")
 
 
 @bp.route('/login', methods=('GET', 'POST'))
