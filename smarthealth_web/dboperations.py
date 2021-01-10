@@ -76,8 +76,9 @@ def get_admin_by_username(username):
     return u
 
 
-# def remove_patient(url, patientid):
-#     with dbapi2.connect(url) as connection:
-#         cursor = connection.cursor()
-#         cursor.execute("DELETE FROM patient WHERE patientid = {patientid};")
-#         cursor.close()
+def delete_patient_with_national_id(national_id):
+    statement = "DELETE FROM patient WHERE national_id = %s;"
+    url = current_app.config['DATABASE']
+    with dbapi2.connect(url) as conn:
+        with conn.cursor() as cur:
+            cur.execute(statement, (national_id, ))
