@@ -1,9 +1,9 @@
 # import functools
 # from werkzeug.security import check_password_hash, generate_password_hash
 
-from flask import request, redirect, url_for
+from flask import session, redirect, url_for, render_template, Blueprint
 from smarthealth_web.forms import DoctorLoginForm, AddPatientForm
-from flask import render_template, Blueprint
+from smarthealth_web.dboperations import query_where
 from decouple import config
 from smarthealth_web import dboperations
 import psycopg2 as dpapi2
@@ -26,7 +26,16 @@ def login():
         # user = User.query.filter_by(email=form.email.data).first()
         # if user is not None and user.verify_password(form.password.data):
         # login_user(None)
-        return redirect(url_for("doctor.home_page"))  # if successful
+        # d_username = form.username.data
+        # d = query_where(table_name="doctor", condition=f"username='{d_username}'")
+        # if d:
+        #    try:
+        #        lc = form.password.data
+        #    except ValueError:
+        #        lc = None
+        #    if lc == d[0][3]:  # add redirect after this confirmation
+        #        session["doctor"] = d[0]
+        return redirect(url_for("doctor.home_page"))
     return render_template('doctor/doctor_login.html', form=form)
 
 
@@ -34,11 +43,11 @@ def login():
 def add_patient():
     form = AddPatientForm()
     if form.validate_on_submit():
-        print(request.data)
         # Check if any patient exists with given ID
         # Dont add again if patient exists
         try:
             dboperations.add_newpatient(
+                form.patient_national_id.data,
                 form.patient_name.data,
                 form.patient_surname.data,
                 form.patient_gender.data,

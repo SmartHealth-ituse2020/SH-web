@@ -13,6 +13,7 @@
 
 <form action="{{ url_for('doctor.add_patient') }}" class="box" method="post" name="patient_add">
     {{ form.hidden_tag() }}
+    {{ render_field(form.patient_national_id, placeholder="12345678901", label_class="label", icon="") }}<br>
     {{ render_field(form.patient_name, placeholder="Donald", label_class="label", icon="") }}<br>
     {{ render_field(form.patient_surname, placeholder="Trump", label_class="label", icon="") }}<br>
     {{ render_field(form.patient_gender, label_class="label", icon="") }}<br>

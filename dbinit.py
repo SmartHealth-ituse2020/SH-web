@@ -6,7 +6,7 @@ INIT_STATEMENTS = [open("database_design.sql", "r").read()]
 
 
 def initialize(delete=False):
-    url = current_app.config['DATABASE']
+    url = current_app.config["DATABASE"]
     with dbapi2.connect(url) as connection:
         cursor = connection.cursor()
         for statement in INIT_STATEMENTS:

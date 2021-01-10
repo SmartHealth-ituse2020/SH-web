@@ -10,13 +10,20 @@
 	</div>
 </section>
 <section class="hero">
-	<div class="container">	
+    <div class="container">
       <div class="columns is-centered">
         <div class="column is-5-tablet is-4-desktop is-3-widescreen">
           <form action="{{ url_for( 'patient.login') }}" class="box" method="post">
+            {% if errors %}
+                <div class="alert">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                {{ errors }}
+                </div>
+            {% endif %}
+
             {{ form.hidden_tag() }}
             {{ render_field(form.national_id, placeholder="193XXXXXXXX", label_class="label", icon="fa fa-user") }}<br>
-            {{ render_field(form.password, placeholder="Password", label_class="label", icon="fa fa-envelope") }}<br>
+            {{ render_field(form.logcode, placeholder="Log Code", label_class="label", icon="fa fa-envelope") }}<br>
             <p><input class="button is-success" type="submit" value="Login"></p>
           </form>
         </div>

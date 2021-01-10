@@ -2,11 +2,6 @@ from smarthealth_web import create_app, dboperations
 from decouple import config
 import pytest
 import dbinit
-import os
-
-
-with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'r') as f:
-    _data_sql = f.read()
 
 
 @pytest.fixture
@@ -18,7 +13,6 @@ def app():
         dbinit.initialize(delete=True)
         conn = dboperations.get_db()
         cur = conn.cursor()
-        cur.execute(_data_sql)
         cur.close()
 
     yield app
