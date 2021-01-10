@@ -15,7 +15,12 @@ DATABASE_URL = config('DATABASE_URL')
 
 @bp.route('/dashboard', methods=('GET',))
 def home_page():
-    return render_template("admin/admin_dashboard.html")
+    if "user_id" not in session:
+        return redirect(url_for("login_page"))
+    elif "user_is_admin" not in session or not session["user_id_admin"]:
+        return redirect(url_for("login_page"))
+    else:
+        return render_template("admin/admin_dashboard.html")
 
 
 @bp.route('/login', methods=('GET', 'POST'))
