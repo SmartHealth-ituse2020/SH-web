@@ -97,7 +97,7 @@ def get_doctor_by_username_or_national_id(uname, nid):
 def add_doctor_to_database(name, surname, pword, uname, hosp, title, prof, added_by, nid):
     statement = """
     INSERT INTO doctor(name, surname, password, username, hospital, title, profession, added_by, national_id)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
     """
 
     values = (name, surname, pword, uname, hosp, title, prof, added_by, nid)
@@ -106,3 +106,13 @@ def add_doctor_to_database(name, surname, pword, uname, hosp, title, prof, added
     with dbapi2.connect(url) as conn:
         with conn.cursor() as cur:
             cur.execute(statement, values)
+
+
+def get_appointments_of_doctor(doctor_id):
+    statement = "SELECT * FROM appointment WHERE related_doctor = %s;"
+    url = current_app.config['DATABASE']
+    with dbapi2.connect(url) as conn:
+        with conn.cursor() as cur:
+            cur.execute(statement, (doctor_id, ))
+            u = cur.fetchall()
+    return u

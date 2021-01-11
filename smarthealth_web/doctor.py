@@ -2,7 +2,7 @@ import functools
 from werkzeug.security import check_password_hash
 from flask import session, redirect, url_for, render_template, Blueprint, flash
 from smarthealth_web.forms import DoctorLoginForm, AddPatientForm
-from smarthealth_web.dboperations import get_doctor_by_username_or_national_id
+from smarthealth_web.dboperations import get_doctor_by_username_or_national_id, get_appointments_of_doctor
 from decouple import config
 from smarthealth_web import dboperations
 import psycopg2 as dpapi2
@@ -17,7 +17,7 @@ def doctor_login_required(view):
         if 'user_id' not in session:
             return redirect(url_for("login_page"))
         elif "user_is_doctor" not in session or not session["user_is_doctor"]:
-            flash("You are not an doctor.")
+            flash("You are not a doctor.")
             return redirect(url_for("login_page"))
         return view(**kwargs)
     return wrapped_view
@@ -26,12 +26,11 @@ def doctor_login_required(view):
 @bp.route('/dashboard', methods=('GET',))
 @doctor_login_required
 def home_page():
-    rows = dboperations.query(table_name="patient")
+    rows = get_appointments_of_doctor(session["user_id"])
     return render_template("doctor/doctor_dashboard.html", rows=sorted(rows), len=len(rows))
 
 
 @bp.route('/login', methods=('GET', 'POST'))
-@doctor_login_required
 def login():
     form = DoctorLoginForm()
     error = None
