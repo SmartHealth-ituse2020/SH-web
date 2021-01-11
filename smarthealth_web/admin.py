@@ -1,10 +1,12 @@
 import functools
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from flask import redirect, url_for, session, flash
-from smarthealth_web.forms import AdminLoginForm
-from smarthealth_web.dboperations import get_admin_by_username
+from smarthealth_web.forms import AdminLoginForm, AddDoctorForm
 from flask import render_template, Blueprint
 from decouple import config
+from smarthealth_web.dboperations import (
+    get_admin_by_username, get_doctor_by_username_or_national_id, add_doctor_to_database
+)
 
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')
@@ -51,3 +53,40 @@ def login():
 
             return redirect(url_for("admin.home_page"))
     return render_template('admin/admin_login.html', form=form, error=error)
+
+
+@bp.route('/add_doctor', methods=('GET', 'POST'))
+@admin_login_required
+def add_doctor():
+    form = AddDoctorForm()
+    error = None
+    if form.validate_on_submit():
+
+        national_id = form.national_id.data
+        name = form.name.data
+        surname = form.surname.data
+        password = form.password.data
+        username = form.username.data
+        hospital = form.hospital.data
+        title = form.title.data
+        profession = form.profession.data
+
+        u = get_doctor_by_username_or_national_id(username, national_id)
+
+        if u is not None:
+            error = "Doctor is already registered."
+        if error is None:
+            add_doctor_to_database(
+                name,
+                surname,
+                generate_password_hash(password),
+                username,
+                hospital,
+                title,
+                profession,
+                session["user_id"],  # added by
+                national_id
+            )
+
+            return redirect(url_for("admin.home_page"))
+    return render_template('admin/add_doctor.html', form=form, error=error)
