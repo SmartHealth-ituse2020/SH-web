@@ -1,0 +1,27 @@
+{% extends "admin/admin_layout.html" %}
+{% block title %}Add Doctor{% endblock %}
+{% block content %}
+<h1 class="title">New Doctor</h1>
+
+{% from "macro.html" import render_field %}
+    {% if error %}
+        <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            {{ error }}
+        </div>
+    {% endif %}
+
+<form action="{{ url_for('admin.add_doctor') }}" class="box" method="post" name="doctor_add">
+    {{ form.hidden_tag() }}
+    {{ render_field(form.national_id, placeholder="12345678901", label_class="label", icon="") }}<br>
+    {{ render_field(form.name, placeholder="Joe", label_class="label", icon="") }}<br>
+    {{ render_field(form.surname, placeholder="Biden", label_class="label", icon="") }}<br>
+    {{ render_field(form.password, placeholder="***", label_class="label", icon="") }}<br>
+    {{ render_field(form.confirm, placeholder="*** (again)", label_class="label", icon="") }}<br>
+    {{ render_field(form.username, placeholder="qtmd123", label_class="label", icon="") }}<br>
+    {{ render_field(form.hospital, placeholder="Sakura State Hospital", label_class="label", icon="") }}<br>
+    {{ render_field(form.title, placeholder="Title", label_class="label", icon="") }}<br>
+    {{ render_field(form.profession, placeholder="Profession", label_class="label", icon="") }}<br>
+    <p><input class="button is-success" type="submit" value="Add Doctor"></p>
+</form>
+{% endblock %}
