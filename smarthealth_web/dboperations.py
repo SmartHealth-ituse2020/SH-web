@@ -106,4 +106,3 @@ def add_doctor_to_database(name, surname, pword, uname, hosp, title, prof, added
     with dbapi2.connect(url) as conn:
         with conn.cursor() as cur:
             cur.execute(statement, values)
-

@@ -1,9 +1,8 @@
 # import functools
-# from werkzeug.security import check_password_hash, generate_password_hash
-
+from werkzeug.security import check_password_hash
 from flask import session, redirect, url_for, render_template, Blueprint
 from smarthealth_web.forms import DoctorLoginForm, AddPatientForm
-from smarthealth_web.dboperations import query_where
+from smarthealth_web.dboperations import get_doctor_by_username_or_national_id
 from decouple import config
 from smarthealth_web import dboperations
 import psycopg2 as dpapi2
@@ -21,22 +20,26 @@ def home_page():
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     form = DoctorLoginForm()
+    error = None
     if form.validate_on_submit():
-        # Add user validation code here
-        # user = User.query.filter_by(email=form.email.data).first()
-        # if user is not None and user.verify_password(form.password.data):
-        # login_user(None)
-        # d_username = form.username.data
-        # d = query_where(table_name="doctor", condition=f"username='{d_username}'")
-        # if d:
-        #    try:
-        #        lc = form.password.data
-        #    except ValueError:
-        #        lc = None
-        #    if lc == d[0][3]:  # add redirect after this confirmation
-        #        session["doctor"] = d[0]
-        return redirect(url_for("doctor.home_page"))
-    return render_template('doctor/doctor_login.html', form=form)
+
+        username = form.username.data
+        password = form.password.data
+
+        u = get_doctor_by_username_or_national_id(username, "0")  # give national id as 0
+
+        if u is None:
+            error = "Invalid username or password."
+        elif not check_password_hash(u[3], password):
+            error = "Invalid username or password."
+        if error is None:
+            session.clear()
+            session["user_id"] = u[0]
+            session["user_is_admin"] = False
+            session["user_is_doctor"] = True
+
+            return redirect(url_for("doctor.home_page"))
+    return render_template('doctor/doctor_login.html', form=form, error=error)
 
 
 @bp.route('/add', methods=('GET', 'POST'))

@@ -11,12 +11,11 @@ def validate_nationalid(form, field):
 class DoctorLoginForm(FlaskForm):
 
     username = StringField('Username',
-                           validators=[DataRequired(), Length(8, 15)],
+                           validators=[DataRequired(), Length(1, 50)],
                            render_kw={'class': 'input'}
                            )
 
     password = PasswordField('Password', validators=[DataRequired()], render_kw={'class': 'input'})
-    remember_me = BooleanField('Remember me')
     submit = SubmitField('Log In', render_kw={'class': 'button is-success'})
 
     def __init__(self, *args, **kwargs):

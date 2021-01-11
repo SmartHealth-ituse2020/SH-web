@@ -32,7 +32,6 @@ def login():
                 session["patient"] = p[0]
                 return redirect(url_for("patient.home_page"))  # if successful
 
-
         return render_template(
             'patient/patient_login.html',
             form=form,
