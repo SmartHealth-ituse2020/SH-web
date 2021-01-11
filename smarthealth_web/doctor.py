@@ -1,6 +1,6 @@
-# import functools
+import functools
 from werkzeug.security import check_password_hash
-from flask import session, redirect, url_for, render_template, Blueprint
+from flask import session, redirect, url_for, render_template, Blueprint, flash
 from smarthealth_web.forms import DoctorLoginForm, AddPatientForm
 from smarthealth_web.dboperations import get_doctor_by_username_or_national_id
 from decouple import config
@@ -11,13 +11,27 @@ bp = Blueprint('doctor', __name__, url_prefix='/doctor')
 DATABASE_URL = config('DATABASE_URL')
 
 
+def doctor_login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for("login_page"))
+        elif "user_is_doctor" not in session or not session["user_is_doctor"]:
+            flash("You are not an doctor.")
+            return redirect(url_for("login_page"))
+        return view(**kwargs)
+    return wrapped_view
+
+
 @bp.route('/dashboard', methods=('GET',))
+@doctor_login_required
 def home_page():
     rows = dboperations.query(table_name="patient")
     return render_template("doctor/doctor_dashboard.html", rows=sorted(rows), len=len(rows))
 
 
 @bp.route('/login', methods=('GET', 'POST'))
+@doctor_login_required
 def login():
     form = DoctorLoginForm()
     error = None
@@ -43,11 +57,11 @@ def login():
 
 
 @bp.route('/add', methods=('GET', 'POST'))
+@bp.route('/add_patient', methods=('GET', 'POST'))
+@doctor_login_required
 def add_patient():
     form = AddPatientForm()
     if form.validate_on_submit():
-        # Check if any patient exists with given ID
-        # Dont add again if patient exists
         try:
             dboperations.add_newpatient(
                 form.patient_national_id.data,
