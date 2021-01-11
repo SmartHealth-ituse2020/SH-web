@@ -10,7 +10,7 @@ def app():
     app = create_app(test_config=True, test_db=db_path)
 
     with app.app_context():
-        dbinit.initialize(delete=True)
+        dbinit.initialize(delete=True, test=True)
         conn = dboperations.get_db()
         cur = conn.cursor()
         cur.close()
