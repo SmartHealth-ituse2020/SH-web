@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField, IntegerField
-from wtforms.validators import DataRequired, Length, ValidationError
+from wtforms.validators import DataRequired, Length, ValidationError, InputRequired, EqualTo
 
 
 def validate_nationalid(form, field):
@@ -57,3 +57,21 @@ class AddPatientForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super(AddPatientForm, self).__init__(*args, **kwargs)
+
+
+class AddDoctorForm(FlaskForm):
+    national_id = StringField('Doctor National ID', validators=[DataRequired(), validate_nationalid], render_kw={'class': 'input'})
+    name = StringField('Name', validators=[DataRequired(), Length(1, 30)], render_kw={'class': 'input'})
+    surname = StringField('Surname', validators=[DataRequired(), Length(1, 30)], render_kw={'class': 'input'})
+    password = PasswordField('Password',
+                             validators=[InputRequired(), EqualTo('confirm', message='Passwords must match')],
+                             render_kw={'class': 'input'}
+                             )
+    confirm = PasswordField('Verify password', render_kw={'class': 'input'})
+    username = StringField('Username', validators=[DataRequired(), Length(1, 30)], render_kw={'class': 'input'})
+    hospital = StringField('Hospital', validators=[DataRequired()], render_kw={'class': 'input'})
+    title = StringField('Title of the doctor', validators=[DataRequired(), Length(1, 50)], render_kw={'class': 'input'})
+    profession = StringField('Profession', validators=[DataRequired(), Length(1, 50)], render_kw={'class': 'input'})
+
+    def __init__(self, *args, **kwargs):
+        super(AddDoctorForm, self).__init__(*args, **kwargs)
