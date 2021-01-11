@@ -82,3 +82,28 @@ def delete_patient_with_national_id(national_id):
     with dbapi2.connect(url) as conn:
         with conn.cursor() as cur:
             cur.execute(statement, (national_id, ))
+
+
+def get_doctor_by_username_or_national_id(uname, nid):
+    statement = "SELECT * FROM doctor WHERE username = %s OR national_id = %s;"
+    url = current_app.config['DATABASE']
+    with dbapi2.connect(url) as conn:
+        with conn.cursor() as cur:
+            cur.execute(statement, (uname, nid))
+            u = cur.fetchone()
+    return u
+
+
+def add_doctor_to_database(name, surname, pword, uname, hosp, title, prof, added_by, nid):
+    statement = """
+    INSERT INTO doctor(name, surname, password, username, hospital, title, profession, added_by, national_id)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
+
+    values = (name, surname, pword, uname, hosp, title, prof, added_by, nid)
+
+    url = current_app.config['DATABASE']
+    with dbapi2.connect(url) as conn:
+        with conn.cursor() as cur:
+            cur.execute(statement, values)
+
