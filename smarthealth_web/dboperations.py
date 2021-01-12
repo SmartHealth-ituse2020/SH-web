@@ -109,7 +109,16 @@ def add_doctor_to_database(name, surname, pword, uname, hosp, title, prof, added
 
 
 def get_appointments_of_doctor(doctor_id):
-    statement = "SELECT * FROM appointment WHERE related_doctor = %s;"
+    statement = """
+    SELECT
+    appointment.id, appointment_date, patient.name, 
+    patient.surname, patient.age, patient.gender,
+    doctor_diagnosis, prediction_result
+    FROM
+    appointment
+    LEFT JOIN patient 
+    ON related_patient = patient.id
+    WHERE related_doctor=%s"""
     url = current_app.config['DATABASE']
     with dbapi2.connect(url) as conn:
         with conn.cursor() as cur:

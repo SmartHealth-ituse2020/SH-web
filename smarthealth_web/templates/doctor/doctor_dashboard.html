@@ -4,17 +4,16 @@
 <h1 class="title">Home</h1>
 
 <table class="table is-narrow is-striped is-hoverable" width="100%">
-
     <thead>
         <tr>
-            <th>Patient ID</th>
-            <th>Patient NID</th>
+            <th>Appointment ID</th>
+            <th>Appointment Date</th>
             <th>Patient Name</th>
             <th>Patient Surname</th>
-            <th>Gender</th>
-            <th>Age</th>
-            <th>Log Code</th>
-            <th>Account Creation</th>
+            <th>Patient Age</th>
+            <th>Patient Gender</th>
+            <th>Doctor's Diagnosis</th>
+            <th>Prediction Result</th>
             <th></th>
         </tr>
     </thead>
@@ -22,19 +21,15 @@
 {% for i in range(0,len) %}
         <tr>
             <td>{{ rows[i][0] }}</td>
-            <td>{{ rows[i][7] }}</td>
             <td>{{ rows[i][1] }}</td>
             <td>{{ rows[i][2] }}</td>
             <td>{{ rows[i][3] }}</td>
             <td>{{ rows[i][4] }}</td>
             <td>{{ rows[i][5] }}</td>
-            {% if rows[i][6] %}
-                <td>{{ rows[i][6].strftime("%d-%m-%Y %H:%M") }}</td>
-            {% else %}
-                <td>Not specified.</td>
-            {% endif %}
+            <td>{{ rows[i][6] }}</td>
+            <td>{{ rows[i][7] }}</td>
             <td>
-                <a class="button is-link">
+                <a class="button is-small is-link">
                     <span class="icon is-small is-left">
                     <i class="fa fa-edit"></i>
                     </span></a>
