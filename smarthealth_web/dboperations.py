@@ -116,3 +116,12 @@ def get_appointments_of_doctor(doctor_id):
             cur.execute(statement, (doctor_id, ))
             u = cur.fetchall()
     return u
+
+def get_admin_name_by_id(id):
+    statement = "SELECT * FROM admin WHERE id = %s;"
+    url = current_app.config['DATABASE']
+    with dbapi2.connect(url) as conn:
+        with conn.cursor() as cur:
+            cur.execute(statement, (id, ))
+            u = cur.fetchone()
+    return u[3]

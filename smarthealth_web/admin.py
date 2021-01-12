@@ -5,7 +5,7 @@ from smarthealth_web.forms import AdminLoginForm, AddDoctorForm
 from flask import render_template, Blueprint
 from decouple import config
 from smarthealth_web.dboperations import (
-    get_admin_by_username, get_doctor_by_username_or_national_id, add_doctor_to_database
+    get_admin_by_username, get_doctor_by_username_or_national_id, add_doctor_to_database, query, get_admin_name_by_id
 )
 
 
@@ -28,7 +28,11 @@ def admin_login_required(view):
 @bp.route('/dashboard', methods=('GET',))
 @admin_login_required
 def home_page():
-    return render_template("admin/admin_dashboard.html")
+    rows = query("DOCTOR")
+    admin_names = ["",""]
+    for r in range(len(rows)):
+        admin_names[r] = get_admin_name_by_id(rows[r][8])
+    return render_template("admin/admin_dashboard.html", rows=rows, len=len(rows), admin_names=admin_names)
 
 
 @bp.route('/login', methods=('GET', 'POST'))
