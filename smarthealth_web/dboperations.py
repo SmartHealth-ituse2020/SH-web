@@ -125,3 +125,10 @@ def get_admin_name_by_id(id):
             cur.execute(statement, (id, ))
             u = cur.fetchone()
     return u[3]
+
+def delete_doctor_with_id(id):
+    statement = "DELETE FROM DOCTOR WHERE id = %s;"
+    url = current_app.config['DATABASE']
+    with dbapi2.connect(url) as conn:
+        with conn.cursor() as cur:
+            cur.execute(statement, (id, ))
