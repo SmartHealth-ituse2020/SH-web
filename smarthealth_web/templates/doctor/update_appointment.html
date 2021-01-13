@@ -1,0 +1,26 @@
+{% extends "doctor/doctor_layout.html" %}
+{% block title %}Update Appointment{% endblock %}
+{% block content %}
+<h1 class="title">Update Appointment</h1>
+
+{% from "macro.html" import render_field %}
+    {% if errors %}
+        <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            {{ errors }}
+        </div>
+    {% endif %}
+    <form  action="{{ url_for('doctor.update_appointment', appointment_id=row[0]) }}" class="box" method="post" name="update_appointment">
+        <div class="control">
+            <label class="label">Appointment ID</label>
+            <input class="input" type="text" placeholder="{{row[0]}}" disabled>
+            <label class="label">Appointment Date</label>
+            <input class="input" type="text" placeholder="{{row[4]}}" disabled>
+        </div>
+        {{ form.hidden_tag() }}
+        {{ render_field(form.appointment_realted_patient, value=row[5], label_class="label", icon="") }}<br>
+        {{ render_field(form.appointment_doctor_diagnosis, value=row[2], label_class="label", icon="") }}<br>
+        {{ render_field(form.appointment_diagnosis_comment, value=row[3], class="input", label_class="label", icon="") }}<br>
+    <p><input class="button is-success" type="submit" value="Update Appointment"></p>
+    </form>
+{% endblock %}

@@ -141,3 +141,18 @@ def delete_doctor_with_id(id):
     with dbapi2.connect(url) as conn:
         with conn.cursor() as cur:
             cur.execute(statement, (id, ))
+
+def update_appointment(id, realted_patient, doctor_diagnosis, diagnosis_comment):
+    statement= """
+    UPDATE appointment    
+    SET
+    related_patient = %s,   
+    doctor_diagnosis = %s,   
+    diagnosis_comment = %s    
+    WHERE   
+    id = %s;
+    """
+    url = current_app.config['DATABASE']
+    with dbapi2.connect(url) as conn:
+        with conn.cursor() as cur:
+            cur.execute(statement, (realted_patient, doctor_diagnosis, diagnosis_comment, id))

@@ -1,7 +1,7 @@
 import functools
 from werkzeug.security import check_password_hash
 from flask import session, redirect, url_for, render_template, Blueprint, flash
-from smarthealth_web.forms import DoctorLoginForm, AddPatientForm
+from smarthealth_web.forms import DoctorLoginForm, AddPatientForm, UpdateAppointmentForm
 from smarthealth_web.dboperations import get_doctor_by_username_or_national_id, get_appointments_of_doctor
 from decouple import config
 from smarthealth_web import dboperations
@@ -74,3 +74,23 @@ def add_patient():
 
         return redirect(url_for("doctor.home_page"))
     return render_template('doctor/add_patient.html', form=form)
+
+@bp.route('/update_appointment/<appointment_id>', methods=('GET', 'POST'))
+@doctor_login_required
+def update_appointment(appointment_id):
+    form = UpdateAppointmentForm()
+    if form.validate_on_submit():
+        try:
+            dboperations.update_appointment(
+                form.appointment_id.data,
+                form.appointment_realted_patient.data,
+                form.appointment_doctor_diagnosis.data,
+                form.appointment_diagnosis_comment.data,
+            )
+        except dpapi2.errors.UniqueViolation:
+            return render_template('doctor/update_appointment.html', form=form, rows=rows, errors="Patient ID already exists.")
+
+        return redirect(url_for("doctor.home_page"))
+
+    rows = dboperations.query_where("appointment", "id = " + appointment_id)
+    return render_template('doctor/update_appointment.html', form=form, row=rows[0])

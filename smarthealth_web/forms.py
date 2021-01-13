@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField, IntegerField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField, IntegerField, TextAreaField
 from wtforms.validators import DataRequired, Length, ValidationError, InputRequired, EqualTo
 
 
@@ -74,3 +74,11 @@ class AddDoctorForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super(AddDoctorForm, self).__init__(*args, **kwargs)
+
+class UpdateAppointmentForm(FlaskForm):
+    appointment_realted_patient = IntegerField('Patient ID', validators=[DataRequired()], render_kw={'class': 'input'})
+    appointment_doctor_diagnosis =  StringField("Doctor's Diagnosis",  render_kw={'class': 'input'})
+    appointment_diagnosis_comment = StringField('Comments', render_kw={'class': 'input'})
+
+    def __init__(self, *args, **kwargs):
+        super(UpdateAppointmentForm, self).__init__(*args, **kwargs)

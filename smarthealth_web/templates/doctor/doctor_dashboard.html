@@ -29,7 +29,7 @@
             <td>{{ rows[i][6] }}</td>
             <td>{{ rows[i][7] }}</td>
             <td>
-                <a class="button is-small is-link">
+                <a class="button is-small is-link" href="{{url_for('doctor.update_appointment', appointment_id = rows[i][0])}}">
                     <span class="icon is-small is-left">
                     <i class="fa fa-edit"></i>
                     </span></a>
@@ -45,9 +45,6 @@
     $('.table').DataTable();
 </script>
 <div class="field is-grouped is-grouped-centered">
-    <span class="navbar-item">
-            <a class="button is-link">...</a>
-    </span>
 </div>
 
 {% endblock %}
