@@ -113,7 +113,7 @@ def get_appointments_of_doctor(doctor_id):
     SELECT
     appointment.id, appointment_date, patient.name, 
     patient.surname, patient.age, patient.gender,
-    doctor_diagnosis, prediction_result
+    doctor_diagnosis, prediction_result, logcode
     FROM
     appointment
     LEFT JOIN patient 

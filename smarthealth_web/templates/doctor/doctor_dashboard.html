@@ -14,6 +14,7 @@
             <th>Patient Gender</th>
             <th>Doctor's Diagnosis</th>
             <th>Prediction Result</th>
+            <th>Login Code</th>
             <th></th>
         </tr>
     </thead>
@@ -28,6 +29,7 @@
             <td>{{ rows[i][5] }}</td>
             <td>{{ rows[i][6] }}</td>
             <td>{{ rows[i][7] }}</td>
+            <td>{{ rows[i][8] }}</td>
             <td>
                 <a class="button is-small is-link" href="{{url_for('doctor.update_appointment', appointment_id = rows[i][0])}}">
                     <span class="icon is-small is-left">
