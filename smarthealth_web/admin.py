@@ -30,9 +30,9 @@ def admin_login_required(view):
 @admin_login_required
 def home_page():
     rows = query("DOCTOR")
-    admin_names = ["",""]
+    admin_names = list()
     for r in range(len(rows)):
-        admin_names[r] = get_admin_name_by_id(rows[r][8])
+        admin_names.append(get_admin_name_by_id(rows[r][8]))
     return render_template("admin/admin_dashboard.html", rows=rows, len=len(rows), admin_names=admin_names)
 
 
