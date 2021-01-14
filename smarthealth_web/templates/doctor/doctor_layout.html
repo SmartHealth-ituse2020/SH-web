@@ -22,17 +22,28 @@
       </div>
       <div class="navbar-menu">
         <div class="navbar-start">
-          <a class="navbar-item" href="{{ url_for('doctor.home_page') }}">
+          <a class="navbar-item" href="{{ url_for('doctor.home_page') }}" style="font-weight: 600; font-size: 1.4rem;">
             Home
           </a>
-          <a class="navbar-item" href="{{ url_for('doctor.add_patient') }}">
-            Add New Patient
-          </a>
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-primary" href="{{ url_for('doctor.add_patient') }}" style="color:darkslategray; font-weight: 500;">
+                Add New Patient
+              </a>
+            </div>
+          </div>
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-primary" href="{{ url_for('doctor.add_appointment') }}" style="color:darkslategray; font-weight: 500;">
+                  Add Appointment
+              </a>
+            </div>
+          </div>
         </div>
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
-              <a class="button is-warning" href="{{ url_for('logout') }}">
+              <a class="button is-link" href="{{ url_for('logout') }}">
                 Log out
               </a>
             </div>
