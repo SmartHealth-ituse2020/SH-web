@@ -1,11 +1,14 @@
 import functools
 from werkzeug.security import check_password_hash
 from flask import session, redirect, url_for, render_template, Blueprint, flash
-from smarthealth_web.forms import DoctorLoginForm, AddPatientForm, UpdateAppointmentForm
-from smarthealth_web.dboperations import get_doctor_by_username_or_national_id, get_appointments_of_doctor
+from smarthealth_web.forms import DoctorLoginForm, AddPatientForm, AddAppointmentForm, UpdateAppointmentForm
+from smarthealth_web.dboperations import (
+    get_doctor_by_username_or_national_id, get_appointments_of_doctor, get_patient_by_nid
+)
 from decouple import config
 from smarthealth_web import dboperations
 import psycopg2 as dpapi2
+from time import time
 
 bp = Blueprint('doctor', __name__, url_prefix='/doctor')
 DATABASE_URL = config('DATABASE_URL')
@@ -55,7 +58,6 @@ def login():
     return render_template('doctor/doctor_login.html', form=form, error=error)
 
 
-@bp.route('/add', methods=('GET', 'POST'))
 @bp.route('/add_patient', methods=('GET', 'POST'))
 @doctor_login_required
 def add_patient():
@@ -75,7 +77,34 @@ def add_patient():
         return redirect(url_for("doctor.home_page"))
     return render_template('doctor/add_patient.html', form=form)
 
+
+@bp.route('/appointment', methods=('GET', 'POST'))
+@bp.route('/add_appointment', methods=('GET', 'POST'))
+@doctor_login_required
+def add_appointment():
+    form = AddAppointmentForm()
+    if form.validate_on_submit():
+        patient_national_id = form.patient_national_id.data
+        pat = get_patient_by_nid(patient_national_id)
+        if pat is not None:
+            patient_id = pat[0]
+        else:
+            error = "Patient does not exists!."
+            return render_template('doctor/add_appointment.html', form=form, error=error)
+        pred = bool(time() % 2)  # get_prediction(patient_nid)
+        dboperations.add_appointment(
+            pred,
+            form.diagnosis.data,
+            form.note.data,
+            patient_id,
+            session["user_id"],
+        )
+        return redirect(url_for("doctor.home_page"))
+    return render_template('doctor/add_appointment.html', form=form)
+
+
 @bp.route('/update_appointment/<appointment_id>', methods=('GET', 'POST'))
+@doctor_login_required
 @doctor_login_required
 def update_appointment(appointment_id):
     form = UpdateAppointmentForm()
@@ -88,9 +117,9 @@ def update_appointment(appointment_id):
                 form.appointment_diagnosis_comment.data,
             )
         except dpapi2.errors.UniqueViolation:
-            return render_template('doctor/update_appointment.html', form=form, rows=rows, errors="Patient ID already exists.")
+            return render_template('doctor/update_appointment.html', form=form, errors="Patient ID already exists.")
 
         return redirect(url_for("doctor.home_page"))
 
     rows = dboperations.query_where("appointment", "id = " + appointment_id)
-    return render_template('doctor/update_appointment.html', form=form, row=rows[0])
+    return render_template('doctor/update_appointment.html', form=form)

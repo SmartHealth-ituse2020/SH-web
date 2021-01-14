@@ -21,7 +21,7 @@ def admin_login_required(view):
             return redirect(url_for("login_page"))
         elif "user_is_admin" not in session or not session["user_is_admin"]:
             flash("You are not an admin.")
-            return redirect(url_for("doctor.dashboard"))
+            return redirect(url_for("doctor.home_page"))
         return view(**kwargs)
     return wrapped_view
 
