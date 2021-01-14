@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField, IntegerField, TextAreaField
-from wtforms.validators import DataRequired, Length, ValidationError, InputRequired, EqualTo
+from wtforms.validators import DataRequired, Length, ValidationError, InputRequired, EqualTo, Optional
 
 
 def validate_nationalid(form, field):
@@ -48,7 +48,11 @@ class AdminLoginForm(FlaskForm):
 
 
 class AddPatientForm(FlaskForm):
-    patient_national_id = StringField('Patient National ID', validators=[DataRequired(), validate_nationalid], render_kw={'class': 'input'})
+    patient_national_id = StringField(
+        'Patient National ID',
+        validators=[DataRequired(), validate_nationalid],
+        render_kw={'class': 'input'}
+    )
     patient_name = StringField('Patient Name', validators=[DataRequired()], render_kw={'class': 'input'})
     patient_surname = StringField('Patient Surname', validators=[DataRequired()], render_kw={'class': 'input'})
     patient_gender = RadioField('Patient Gender', validators=[DataRequired()], choices=["Male", "Female", "Others"])
@@ -59,7 +63,11 @@ class AddPatientForm(FlaskForm):
 
 
 class AddDoctorForm(FlaskForm):
-    national_id = StringField('Doctor National ID', validators=[DataRequired(), validate_nationalid], render_kw={'class': 'input'})
+    national_id = StringField(
+        'Doctor National ID',
+        validators=[DataRequired(), validate_nationalid],
+        render_kw={'class': 'input'}
+    )
     name = StringField('Name', validators=[DataRequired(), Length(1, 30)], render_kw={'class': 'input'})
     surname = StringField('Surname', validators=[DataRequired(), Length(1, 30)], render_kw={'class': 'input'})
     password = PasswordField('Password',
@@ -75,9 +83,27 @@ class AddDoctorForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super(AddDoctorForm, self).__init__(*args, **kwargs)
 
+
+class AddAppointmentForm(FlaskForm):
+    patient_national_id = StringField(
+        'Patient National ID',
+        validators=[DataRequired(), validate_nationalid],
+        render_kw={'class': 'input'}
+    )
+    diagnosis = StringField(
+        'Doctor Diagnosis: ',
+        validators=[DataRequired(), Length(1, 500)],
+        render_kw={'class': 'input'}
+    )
+    note = StringField('Doctor Note: ', validators=[DataRequired(), Length(1, 500)], render_kw={'class': 'input'})
+
+    def __init__(self, *args, **kwargs):
+        super(AddAppointmentForm, self).__init__(*args, **kwargs)
+
+
 class UpdateAppointmentForm(FlaskForm):
-    appointment_realted_patient = IntegerField('Patient ID', validators=[DataRequired()], render_kw={'class': 'input'})
-    appointment_doctor_diagnosis =  StringField("Doctor's Diagnosis",  render_kw={'class': 'input'})
+    appointment_related_patient = IntegerField('Patient ID', validators=[DataRequired()], render_kw={'class': 'input'})
+    appointment_doctor_diagnosis = StringField("Doctor's Diagnosis",  render_kw={'class': 'input'})
     appointment_diagnosis_comment = StringField('Comments', render_kw={'class': 'input'})
 
     def __init__(self, *args, **kwargs):
