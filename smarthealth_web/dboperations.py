@@ -1,12 +1,24 @@
 import psycopg2 as dbapi2
 from flask import current_app, g
 
+ADD_APPOINTMENT_STATEMENT = """
+INSERT INTO appointment(
+    prediction_result,
+    doctor_diagnosis,
+    diagnosis_comment,
+    appointment_date,
+    related_patient,
+    related_doctor
+    )
+    VALUES (%s, %s, %s, %s,  %s, %s);
+"""
+
 
 def query(table_name):
     url = current_app.config['DATABASE']
     with dbapi2.connect(url) as connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM %s" % (table_name))
+        cursor.execute("SELECT * FROM %s" % table_name)
         rows = cursor.fetchall()
         cursor.close()
         return rows
@@ -126,24 +138,27 @@ def get_appointments_of_doctor(doctor_id):
             u = cur.fetchall()
     return u
 
-def get_admin_name_by_id(id):
+
+def get_admin_name_by_id(admin_id):
     statement = "SELECT * FROM admin WHERE id = %s;"
     url = current_app.config['DATABASE']
     with dbapi2.connect(url) as conn:
         with conn.cursor() as cur:
-            cur.execute(statement, (id, ))
+            cur.execute(statement, (admin_id, ))
             u = cur.fetchone()
     return u[3]
 
-def delete_doctor_with_id(id):
+
+def delete_doctor_with_id(doc_id):
     statement = "DELETE FROM DOCTOR WHERE id = %s;"
     url = current_app.config['DATABASE']
     with dbapi2.connect(url) as conn:
         with conn.cursor() as cur:
-            cur.execute(statement, (id, ))
+            cur.execute(statement, (doc_id, ))
 
-def update_appointment(id, realted_patient, doctor_diagnosis, diagnosis_comment):
-    statement= """
+
+def update_appointment(user_id, realted_patient, doctor_diagnosis, diagnosis_comment):
+    statement = """
     UPDATE appointment    
     SET
     related_patient = %s,   
@@ -155,4 +170,24 @@ def update_appointment(id, realted_patient, doctor_diagnosis, diagnosis_comment)
     url = current_app.config['DATABASE']
     with dbapi2.connect(url) as conn:
         with conn.cursor() as cur:
-            cur.execute(statement, (realted_patient, doctor_diagnosis, diagnosis_comment, id))
+            cur.execute(statement, (realted_patient, doctor_diagnosis, diagnosis_comment, user_id))
+
+
+def add_appointment(pred, diag, comm, pat, doc):
+
+    values = (pred, diag, comm, 'now()', pat, doc)
+    url = current_app.config['DATABASE']
+    with dbapi2.connect(url) as conn:
+        with conn.cursor() as cur:
+            cur.execute(ADD_APPOINTMENT_STATEMENT, values)
+
+
+def get_patient_by_nid(patient_nid):
+    statement = "SELECT * FROM patient WHERE (national_id = %s);"
+    print(patient_nid, statement)
+    url = current_app.config['DATABASE']
+    with dbapi2.connect(url) as conn:
+        with conn.cursor() as cur:
+            cur.execute(statement, (patient_nid,))
+            pat = cur.fetchone()
+    return pat
