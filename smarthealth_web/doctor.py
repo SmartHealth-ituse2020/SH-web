@@ -96,14 +96,14 @@ def add_appointment():
             return render_template('doctor/add_appointment.html', form=form, error=error)
 
         pred = get_prediction(patient_id)
-
         if b"Corrupted" in pred or b"Forbidden" in pred:
             pred = "Error"
         elif b"Pos" in pred:
             pred = "Hypertension"
-        else:
+        elif b"Neg" in pred:
             pred = "Healthy"
-
+        else:
+            pred = "System Fault"
         dboperations.add_appointment(
             pred,
             form.diagnosis.data,
