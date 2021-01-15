@@ -7,14 +7,12 @@
 
     <thead>
         <tr>
-            <th>appointmentid</th>
-            <th>predictionresult</th>
-            <th>doctordiagnosis</th>
-            <th>diagnosiscomment</th>
-            <th>appointmentdate</th>
-            <th>relatedpatient</th>
-            <th>relateddoctor</th>
-            <th></th>
+            <th>Appointment ID</th>
+            <th>Appointment Date</th>
+            <th>Doctor's Name</th>
+            <th>Doctor's Surname</th>
+            <th>Diagnosis</th>
+            <th>Doctor's Comments</th>
         </tr>
     </thead>
     <tbody>
@@ -26,13 +24,6 @@
             <td>{{ rows[i][3] }}</td>
             <td>{{ rows[i][4] }}</td>
             <td>{{ rows[i][5] }}</td>
-            <td>{{ rows[i][6] }}</td>
-            <td>
-                <a class="button is-link">
-                    <span class="icon is-small is-left">
-                    <i class="fa fa-info"></i>
-                    </span></a>
-            </td>
         </tr>
 {%endfor%}
     </tbody> 

@@ -1,5 +1,5 @@
 from flask import session, request, redirect, url_for, render_template, Blueprint, g
-from smarthealth_web.dboperations import query, query_where, get_patient_by_nid
+from smarthealth_web.dboperations import query, query_where, get_patient_by_nid, get_appointments_of_patient
 from smarthealth_web.forms import PatientLoginForm
 from decouple import config
 import psycopg2 as dpapi2
@@ -12,8 +12,8 @@ DATABASE_URL = config('DATABASE_URL')
 def home_page():
     patientid = session["patient"][0]
     print(patientid)
-    rows = query_where("appointment", f"related_patient='{patientid}'")
-    return render_template("patient/patient_dashboard.html", rows=sorted(rows), len=len(rows))
+    rows = get_appointments_of_patient(patientid)
+    return render_template("patient/patient_dashboard.html", rows=rows, len=len(rows))
 
 
 @bp.route('/login', methods=('GET', 'POST'))

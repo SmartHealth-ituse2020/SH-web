@@ -138,6 +138,23 @@ def get_appointments_of_doctor(doctor_id):
             u = cur.fetchall()
     return u
 
+def get_appointments_of_patient(patient_id):
+    statement = """
+    SELECT
+    appointment.id, appointment_date, doctor.name, 
+    doctor.surname, doctor_diagnosis, diagnosis_comment
+    FROM
+    appointment
+    LEFT JOIN doctor
+    ON related_doctor = doctor.id
+    WHERE related_patient=%s"""
+    url = current_app.config['DATABASE']
+    with dbapi2.connect(url) as conn:
+        with conn.cursor() as cur:
+            cur.execute(statement, (patient_id, ))
+            u = cur.fetchall()
+    return u
+
 
 def get_admin_name_by_id(admin_id):
     statement = "SELECT * FROM admin WHERE id = %s;"
