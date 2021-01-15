@@ -104,7 +104,7 @@ def add_appointment():
         return redirect(url_for("doctor.home_page"))
     return render_template('doctor/add_appointment.html', form=form)
 
-@bp.route('/add_appointment/<patient_id>', methods=('GET', 'POST'))
+@bp.route('/patient_details/<patient_id>', methods=('GET', 'POST'))
 @doctor_login_required
 def patient_details(patient_id):
     row = dboperations.query_where("patient", "id = " + patient_id)
