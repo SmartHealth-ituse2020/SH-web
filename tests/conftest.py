@@ -2,7 +2,9 @@ from smarthealth_web import create_app, dboperations
 from decouple import config
 import pytest
 import dbinit
-
+# I tried to run the statements in data.sql to fill the test database
+# But I failed, it doesn't break but it doesn't fill too
+TEST_STATEMENTS = [open("tests\data.sql", "r").read()]
 
 @pytest.fixture
 def app():
@@ -12,8 +14,10 @@ def app():
     with app.app_context():
         dbinit.initialize(delete=True, test=True)
         conn = dboperations.get_db()
-        cur = conn.cursor()
-        cur.close()
+        cursor = conn.cursor()
+        for statement in TEST_STATEMENTS:
+            cursor.execute(statement)
+        cursor.close()
 
     yield app
 
