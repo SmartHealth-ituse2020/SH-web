@@ -102,9 +102,9 @@ class AddAppointmentForm(FlaskForm):
 
 
 class UpdateAppointmentForm(FlaskForm):
-    appointment_related_patient = IntegerField('Patient ID', validators=[DataRequired()], render_kw={'class': 'input'})
-    appointment_doctor_diagnosis = StringField("Doctor's Diagnosis",  render_kw={'class': 'input'})
-    appointment_diagnosis_comment = StringField('Comments', render_kw={'class': 'input'})
+    patient_nid = StringField('Patient ID', validators=[validate_nationalid], render_kw={'class': 'input'})
+    diagnosis = StringField("Doctor's Diagnosis",  render_kw={'class': 'input'})
+    note = StringField('Comments', render_kw={'class': 'input'})
 
     def __init__(self, *args, **kwargs):
         super(UpdateAppointmentForm, self).__init__(*args, **kwargs)

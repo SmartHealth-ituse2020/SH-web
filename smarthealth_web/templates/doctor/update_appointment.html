@@ -10,17 +10,18 @@
             {{ errors }}
         </div>
     {% endif %}
-    <form  action="{{ url_for('doctor.update_appointment', appointment_id=row[0]) }}" class="box" method="post" name="update_appointment">
+
+    <form  action="{{ url_for('doctor.update_appointment', appointment_id=data.id) }}" class="box" method="post" name="update_appointment">
         <div class="control">
             <label class="label">Appointment ID</label>
-            <input class="input" type="text" placeholder="{{row[0]}}" disabled>
+            <input class="input" type="text" placeholder="{{data.id}}" disabled>
             <label class="label">Appointment Date</label>
-            <input class="input" type="text" placeholder="{{row[4]}}" disabled>
+            <input class="input" type="text" placeholder="{{ data.date }}" disabled>
         </div>
         {{ form.hidden_tag() }}
-        {{ render_field(form.appointment_realted_patient, value=row[5], label_class="label", icon="") }}<br>
-        {{ render_field(form.appointment_doctor_diagnosis, value=row[2], label_class="label", icon="") }}<br>
-        {{ render_field(form.appointment_diagnosis_comment, value=row[3], class="input", label_class="label", icon="") }}<br>
+        {{ render_field(form.patient_nid, value=data.patient_national_id, label_class="label", icon="") }}<br>
+        {{ render_field(form.diagnosis, value=data.diagnosis, label_class="label", icon="") }}<br>
+        {{ render_field(form.note, value=data.note, class="input", label_class="label", icon="") }}<br>
     <p><input class="button is-success" type="submit" value="Update Appointment"></p>
     </form>
 {% endblock %}

@@ -124,8 +124,8 @@ def get_appointments_of_doctor(doctor_id):
     statement = """
     SELECT
     appointment.id, appointment_date, patient.name, 
-    patient.surname, patient.age, patient.gender,
-    doctor_diagnosis, prediction_result, logcode
+    patient.surname, patient.age, patient.gender, patient.national_id,
+    doctor_diagnosis, diagnosis_comment, prediction_result, logcode
     FROM
     appointment
     LEFT JOIN patient 
@@ -157,11 +157,14 @@ def delete_doctor_with_id(doc_id):
             cur.execute(statement, (doc_id, ))
 
 
-def update_appointment(user_id, realted_patient, doctor_diagnosis, diagnosis_comment):
+def update_appointment(app_id, patient_nid, doctor_diagnosis, diagnosis_comment):
+    pat = get_patient_by_nid(patient_nid)
+    if pat is None:
+        raise KeyError("Patient with given id does not exist. Create it first..")
     statement = """
-    UPDATE appointment    
+    UPDATE appointment
     SET
-    related_patient = %s,   
+    related_patient = %s,
     doctor_diagnosis = %s,   
     diagnosis_comment = %s    
     WHERE   
@@ -170,7 +173,7 @@ def update_appointment(user_id, realted_patient, doctor_diagnosis, diagnosis_com
     url = current_app.config['DATABASE']
     with dbapi2.connect(url) as conn:
         with conn.cursor() as cur:
-            cur.execute(statement, (realted_patient, doctor_diagnosis, diagnosis_comment, user_id))
+            cur.execute(statement, (pat[0], doctor_diagnosis, diagnosis_comment, app_id))
 
 
 def add_appointment(pred, diag, comm, pat, doc):
@@ -184,8 +187,8 @@ def add_appointment(pred, diag, comm, pat, doc):
 
 def get_patient_by_nid(patient_nid):
     statement = "SELECT * FROM patient WHERE (national_id = %s);"
-    print(patient_nid, statement)
     url = current_app.config['DATABASE']
+    print(url)
     with dbapi2.connect(url) as conn:
         with conn.cursor() as cur:
             cur.execute(statement, (patient_nid,))

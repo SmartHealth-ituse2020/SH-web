@@ -26,6 +26,7 @@ def doctor_login_required(view):
     return wrapped_view
 
 
+@bp.route('/', methods=('GET',))
 @bp.route('/dashboard', methods=('GET',))
 @doctor_login_required
 def home_page():
@@ -58,6 +59,7 @@ def login():
     return render_template('doctor/doctor_login.html', form=form, error=error)
 
 
+@bp.route('/patient', methods=('GET', 'POST'))
 @bp.route('/add_patient', methods=('GET', 'POST'))
 @doctor_login_required
 def add_patient():
@@ -105,21 +107,70 @@ def add_appointment():
 
 @bp.route('/update_appointment/<appointment_id>', methods=('GET', 'POST'))
 @doctor_login_required
-@doctor_login_required
 def update_appointment(appointment_id):
     form = UpdateAppointmentForm()
+
+    appointments = get_appointments_of_doctor(session["user_id"])
+
+    error = "Permission denied for this appointment."  # initialize error message
+    ap = None  # initialize appointment
+    for i in range(len(appointments)):
+        ap = appointments[i]
+        if str(ap[0]) == appointment_id:  # appointment is related to doctor
+            error = None
+            break
+
+    if error is not None or ap is None:  # if not related, return error.
+        flash(error)
+        return redirect(url_for("doctor.home_page"))
+
+    # set template data for rendering
+    data = {
+        "id": ap[0],
+        "date": ap[1],
+        "patient_national_id": ap[6],
+        "diagnosis": ap[7],
+        "note": ap[8],
+    }
+
     if form.validate_on_submit():
+
+        # initialize all as None
+        patient_nid = diagnosis = note = None
+
+        # patient nid is changed
+        if form.patient_nid.data:
+            patient_nid = form.patient_nid.data
+        else:
+            patient_nid = ap[5]  # unchanged
+
+        # diagnosis is changed
+        if form.diagnosis.data:
+            diagnosis = form.diagnosis.data
+        else:
+            diagnosis = ap[2]  # unchanged
+
+        # note is changed
+        if form.note.data:
+            note = form.note.data
+        else:
+            note = ap[3]  # unchanged
+
         try:
             dboperations.update_appointment(
-                form.appointment_id.data,
-                form.appointment_realted_patient.data,
-                form.appointment_doctor_diagnosis.data,
-                form.appointment_diagnosis_comment.data,
+                appointment_id,
+                form.patient_nid.data,
+                form.diagnosis.data,
+                form.note.data,
             )
-        except dpapi2.errors.UniqueViolation:
-            return render_template('doctor/update_appointment.html', form=form, errors="Patient ID already exists.")
+        except (dpapi2.errors.UniqueViolation, KeyError) as e:
+            return render_template(
+                'doctor/update_appointment.html',
+                form=form,
+                errors=e,
+                data=data,
+            )
 
         return redirect(url_for("doctor.home_page"))
 
-    rows = dboperations.query_where("appointment", "id = " + appointment_id)
-    return render_template('doctor/update_appointment.html', form=form)
+    return render_template('doctor/update_appointment.html', form=form, data=data, error=error)
