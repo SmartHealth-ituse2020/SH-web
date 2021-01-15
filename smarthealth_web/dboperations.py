@@ -141,8 +141,8 @@ def get_appointments_of_doctor(doctor_id):
 def get_appointments_of_patient(patient_id):
     statement = """
     SELECT
-    appointment.id, appointment_date, doctor.name, 
-    doctor.surname, doctor_diagnosis, diagnosis_comment
+    appointment.id, appointment_date, doctor.name,
+    doctor.surname, doctor_diagnosis, diagnosis_comment, doctor.id
     FROM
     appointment
     LEFT JOIN doctor

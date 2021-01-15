@@ -20,7 +20,11 @@
         <tr>
             <td>{{ rows[i][0] }}</td>
             <td>{{ rows[i][1] }}</td>
-            <td>{{ rows[i][2] }}</td>
+            <td><a class="button is-small" href="{{url_for('patient.doctor_details', doctor_id = rows[i][6]|int )}}">
+                <span class="icon is-small is-left">
+                <i class="fa fa-info"></i>
+                </span></a>
+                {{ rows[i][2] }}</td>
             <td>{{ rows[i][3] }}</td>
             <td>{{ rows[i][4] }}</td>
             <td>{{ rows[i][5] }}</td>

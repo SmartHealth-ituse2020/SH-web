@@ -15,6 +15,16 @@ def home_page():
     rows = get_appointments_of_patient(patientid)
     return render_template("patient/patient_dashboard.html", rows=rows, len=len(rows))
 
+@bp.route('/patient_details', methods=('GET', 'POST'))
+def patient_details():
+    patientid = session["patient"][0]
+    row = query_where("patient", "id = " + str(patientid))
+    return render_template('patient/patient_details.html', row=row[0])
+
+@bp.route('/doctor_details/<doctor_id>', methods=('GET', 'POST'))
+def doctor_details(doctor_id):
+    row = query_where("doctor", "id = " + doctor_id)
+    return render_template('patient/doctor_details.html', row=row[0])
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
