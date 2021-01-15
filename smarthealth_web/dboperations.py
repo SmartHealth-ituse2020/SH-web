@@ -138,6 +138,7 @@ def get_appointments_of_doctor(doctor_id):
             u = cur.fetchall()
     return u
 
+
 def get_appointments_of_patient(patient_id):
     statement = """
     SELECT

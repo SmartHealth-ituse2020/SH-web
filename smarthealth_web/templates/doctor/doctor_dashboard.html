@@ -32,7 +32,7 @@
             <td>{{ rows[i][4] }}</td>
             <td>{{ rows[i][5] }}</td>
             <td>{{ rows[i][7] }}</td>
-            <td>{{ "Hypertension" if rows[i][9] else "Healthy" }}</td>
+            <td>{{ rows[i][9] }}</td>
             <td>{{ rows[i][10] }}</td>
             <td>
                 <a class="button is-small is-link" href="{{url_for('doctor.update_appointment', appointment_id = rows[i][0])}}">
