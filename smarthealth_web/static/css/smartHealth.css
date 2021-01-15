@@ -74,3 +74,8 @@ footer {
   display: flex;
   align-items: center;
 }
+
+a.is-primary {
+  color:darkslategray !important;
+  font-weight: 500 !important;
+}
