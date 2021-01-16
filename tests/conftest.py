@@ -25,39 +25,3 @@ def client(app):
 @pytest.fixture
 def runner(app):
     return app.test_cli_runner()
-
-
-def login(client, username, password):
-    return client.post('/doctor/login', data=dict(
-        username="dtestuser",
-        password="password1"
-    ), follow_redirects=True)
-
-
-def logout(client):
-    return client.get('/logout', follow_redirects=True)
-
-
-@pytest.fixture
-def adminSession(client):
-    with client.session_transaction() as session:
-        session["user_id"] = 0
-        session["user_is_admin"] = True
-        session["user_is_doctor"] = False
-    yield session
-
-
-@pytest.fixture(scope="module")
-def doctorSession(client):
-    with client.session_transaction() as session:
-        session["user_id"] = 0
-        session["user_is_admin"] = False
-        session["user_is_doctor"] = True
-    yield session
-
-
-@pytest.fixture
-def patientSession(client):
-    with client.session_transaction() as session:
-        session["patient"] = dboperations.get_patient_by_nid('ptestNid')
-    yield session

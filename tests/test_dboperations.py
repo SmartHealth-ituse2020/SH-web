@@ -47,6 +47,7 @@ def test_get_doctor_by_username_or_national_id(app):
     with app.app_context():
         u = get_doctor_by_username_or_national_id('doctoruser1','National_id1')
         uid = u[0]
+    print(u)
     assert u == (uid, 'doctor1','surname1','password1','doctoruser1','hospital1','title1','profession1',1,'National_id1', True)
 
 

@@ -1,26 +1,29 @@
 from smarthealth_web.dboperations import query_where
-from conftest import login
 from flask_wtf import FlaskForm
+import pytest
 
 def test_login(client):
-    req = client.get("/doctor/login")
-    res = client.post("/doctor/login", data=dict(
-        username="wronguser",
-        password="password1"
-    ), follow_redirects=True)
-    assert b"Invalid username or password." in res.data
-    res = client.post("/doctor/login", data=dict(
-        username="dtestuser",
-        password="wrongpswrd"
-    ), follow_redirects=True)
-    assert b"Invalid username or password." in res.data
-    res = client.post("/doctor/login", data=dict(
-        username="dtestuser",
-        password="password1"
-    ), follow_redirects=True)
-    assert req.status_code == 200
+    with client:
+        req = client.get("/doctor/login")
+        res = client.post("/doctor/login", data=dict(
+            username="wronguser",
+            password="1"
+        ), follow_redirects=True)
+        assert b"Invalid username or password." in res.data
+        res = client.post("/doctor/login", data=dict(
+            username="dtestuser",
+            password="wrong"
+        ), follow_redirects=True)
+        assert b"Invalid username or password." in res.data
+        res = client.post("/doctor/login", data=dict(
+            username="dtestuser",
+            password="1"
+        ), follow_redirects=True)
+        assert b"Appointment ID" in res.data
+        assert res.status_code == 200
 
 
+@pytest.mark.skip
 def test_add_patient_form_with_proper_input(app):
     cli = app.test_client()
     with app.app_context():
@@ -37,6 +40,7 @@ def test_add_patient_form_with_proper_input(app):
     assert res.status_code == 302
 
 
+@pytest.mark.skip
 def test_add_patient_form_without_age(app,doctorSession):
     cli = app.test_client()
     with app.app_context():
@@ -110,5 +114,3 @@ def test_add_patient_form_without_gender(app):
     assert res.status_code == 200
     #assert b"This field is required" in res.data
     assert p == []
-
-
