@@ -3,35 +3,41 @@
 {% block content %}
 <h1 class="title">Home</h1>
 
-<div class="columns is-centered is-mobile">
-    <div class="column is-half">
-        <table class="table is-narrow is-striped is-hoverable" width="100%">
-            <thead>
-                <tr>
-                    <th>Doctor ID</th>
-                    <th>Username</th>
-                    <th>Added By</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-        {% for i in range(0,len) %}
-                <tr>
-                    <td>{{ rows[i][0] }}</td>
-                    <td>{{ rows[i][4] }}</td>
-                    <td>{{ admin_names[i] }}</td>
-                    <td>
-                        <a class="button is-small is-danger" href="{{url_for('admin.remove_doctor', doctor_id=rows[i][0]) }}">
-                            <span class="icon is-small is-left">
-                            <i class="fa fa-trash"></i>
-                            </span></a>
-                    </td>
-                </tr>
-        {%endfor%}
-            </tbody> 
-        </table>
-    </div>
-</div>
+<table class="table is-narrow is-striped is-hoverable" width="100%">
+    <thead>
+        <tr>
+            <th>Doctor ID</th>
+            <th>Username</th>
+            <th>Title</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Profession</th>
+            <th>Hospital</th>
+            <th>Added By</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+{% for i in range(0,len) %}
+        <tr>
+            <td>{{ rows[i][4] }}</td>
+            <td>{{ rows[i][0] }}</td>
+            <td>{{ rows[i][6] }}</td>
+            <td>{{ rows[i][1] }}</td>
+            <td>{{ rows[i][2] }}</td>
+            <td>{{ rows[i][7] }}</td>
+            <td>{{ rows[i][5] }}</td>
+            <td>{{ admin_names[i] }}</td>
+            <td>
+                <a class="button is-small is-danger" href="{{url_for('admin.remove_doctor', doctor_id=rows[i][0]) }}">
+                    <span class="icon is-small is-left">
+                    <i class="fa fa-trash"></i>
+                    </span></a>
+            </td>
+        </tr>
+{%endfor%}
+    </tbody> 
+</table>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="{{ url_for('static', filename='js/dataTables.bulma.min.js') }}"></script>
