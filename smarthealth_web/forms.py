@@ -102,7 +102,7 @@ class AddAppointmentForm(FlaskForm):
 
 
 class UpdateAppointmentForm(FlaskForm):
-    patient_nid = StringField('Patient ID', validators=[validate_nationalid], render_kw={'class': 'input'})
+    patient_nid = StringField('Patient National ID', validators=[validate_nationalid], render_kw={'class': 'input'})
     diagnosis = StringField("Doctor's Diagnosis",  render_kw={'class': 'input'})
     note = StringField('Comments', render_kw={'class': 'input'})
 
