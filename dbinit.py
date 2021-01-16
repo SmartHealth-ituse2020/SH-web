@@ -4,6 +4,7 @@ from decouple import config
 
 
 INIT_STATEMENTS = [open("database_design.sql", "r").read()]
+TEST_STATEMENTS = [open("tests\data.sql", "r").read()]
 
 
 def initialize(delete=False, test=False):
@@ -22,7 +23,9 @@ def initialize(delete=False, test=False):
             print("Initializing database.")
             cursor.execute(statement)
             print("Done.")
-
+        if test:
+            for stats in TEST_STATEMENTS:
+                cursor.execute(stats)
         cursor.close()
 
 
