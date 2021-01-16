@@ -1,16 +1,30 @@
 from smarthealth_web.dboperations import query_where
-
+from conftest import login
+from flask_wtf import FlaskForm
 
 def test_login(client):
     req = client.get("/doctor/login")
-    # more tests will be added when authentication backend added
+    res = client.post("/doctor/login", data=dict(
+        username="wronguser",
+        password="password1"
+    ), follow_redirects=True)
+    assert b"Invalid username or password." in res.data
+    res = client.post("/doctor/login", data=dict(
+        username="dtestuser",
+        password="wrongpswrd"
+    ), follow_redirects=True)
+    assert b"Invalid username or password." in res.data
+    res = client.post("/doctor/login", data=dict(
+        username="dtestuser",
+        password="password1"
+    ), follow_redirects=True)
     assert req.status_code == 200
 
 
 def test_add_patient_form_with_proper_input(app):
     cli = app.test_client()
     with app.app_context():
-        form = {
+        form = {    
             "patient_national_id": "00000000000",
             "patient_name": "test proper input",
             "patient_surname": "TESTSURNAME",
@@ -18,14 +32,12 @@ def test_add_patient_form_with_proper_input(app):
             "patient_gender": "Male"
         }
         res = cli.post('/doctor/add_patient', data=form, follow_redirects=False)
-
         p = query_where(table_name="patient", condition="name='test proper input'")
-
     assert p != []
     assert res.status_code == 302
 
 
-def test_add_patient_form_without_age(app):
+def test_add_patient_form_without_age(app,doctorSession):
     cli = app.test_client()
     with app.app_context():
         form = {
@@ -98,3 +110,5 @@ def test_add_patient_form_without_gender(app):
     assert res.status_code == 200
     #assert b"This field is required" in res.data
     assert p == []
+
+
