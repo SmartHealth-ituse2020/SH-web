@@ -26,6 +26,15 @@ def doctor_details(doctor_id):
     row = query_where("doctor", "id = " + doctor_id)
     return render_template('patient/doctor_details.html', row=row[0])
 
+@bp.route('/appointment_details/<appointment_id>', methods=('GET', 'POST'))
+def appointment_details(appointment_id):
+    patientid = session["patient"][0]
+    rows = get_appointments_of_patient(patientid)
+    i = 0
+    while int(appointment_id) != int(rows[i][0]):
+        i = i+1
+    return render_template('patient/appointment_details.html', row=rows[i])
+
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     form = PatientLoginForm()

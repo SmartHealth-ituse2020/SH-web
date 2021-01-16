@@ -13,6 +13,7 @@
             <th>Doctor's Surname</th>
             <th>Diagnosis</th>
             <th>Doctor's Comments</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -28,6 +29,11 @@
             <td>{{ rows[i][3] | capitalize }}</td>
             <td>{{ rows[i][4] | truncate(40)}}</td>
             <td>{{ rows[i][5] | truncate(40)}}</td>
+            <td>
+                <a class="button is-small is-link" href="{{url_for('patient.appointment_details', appointment_id = rows[i][0])}}">
+                    Show details
+                </a>
+            </td>
         </tr>
 {%endfor%}
     </tbody> 
