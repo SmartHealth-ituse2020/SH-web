@@ -108,8 +108,8 @@ def get_doctor_by_username_or_national_id(uname, nid):
 
 def add_doctor_to_database(name, surname, pword, uname, hosp, title, prof, added_by, nid):
     statement = """
-    INSERT INTO doctor(name, surname, password, username, hospital, title, profession, added_by, national_id)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
+    INSERT INTO doctor(name, surname, password, username, hospital, title, profession, added_by, national_id, isActive)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 'yes');
     """
 
     values = (name, surname, pword, uname, hosp, title, prof, added_by, nid)
@@ -169,6 +169,21 @@ def get_admin_name_by_id(admin_id):
 
 def delete_doctor_with_id(doc_id):
     statement = "DELETE FROM DOCTOR WHERE id = %s;"
+    url = current_app.config['DATABASE']
+    with dbapi2.connect(url) as conn:
+        with conn.cursor() as cur:
+            cur.execute(statement, (doc_id, ))
+
+def deactivate_doctor(doc_id):
+    statement = """
+        UPDATE doctor
+        SET
+        isActive = 'no',
+        national_id = NULL,
+        username = 9999,
+        password = 0000    
+        WHERE   
+        id = %s;"""
     url = current_app.config['DATABASE']
     with dbapi2.connect(url) as conn:
         with conn.cursor() as cur:

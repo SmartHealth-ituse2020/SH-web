@@ -6,7 +6,7 @@ from flask import render_template, Blueprint
 from decouple import config
 from smarthealth_web.dboperations import (
     get_admin_by_username, get_doctor_by_username_or_national_id, add_doctor_to_database, query,
-    get_admin_name_by_id, delete_doctor_with_id
+    get_admin_name_by_id, delete_doctor_with_id, query_where, deactivate_doctor
 )
 
 
@@ -29,7 +29,7 @@ def admin_login_required(view):
 @bp.route('/dashboard', methods=('GET',))
 @admin_login_required
 def home_page():
-    rows = query("DOCTOR")
+    rows = query_where("DOCTOR", "isActive != 'no'")
     admin_names = list()
     for r in range(len(rows)):
         admin_names.append(get_admin_name_by_id(rows[r][8]))
@@ -97,8 +97,8 @@ def add_doctor():
     return render_template('admin/add_doctor.html', form=form, error=error)
 
 
-@bp.route('/remove_doctor/<doctor_id>', methods=('GET', 'POST'))
+@bp.route('/deactivate_doctor/<doctor_id>', methods=('GET', 'POST'))
 @admin_login_required
 def remove_doctor(doctor_id):
-    delete_doctor_with_id(doctor_id)
+    deactivate_doctor(doctor_id)
     return redirect(url_for("admin.home_page"))

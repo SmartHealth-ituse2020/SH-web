@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS DOCTOR
     title character varying(50) COLLATE pg_catalog."default",
     profession character varying(50) COLLATE pg_catalog."default",
     added_by integer NOT NULL,
-    national_id varchar(15)
+    national_id varchar(15),
+    isActive BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS PATIENT
