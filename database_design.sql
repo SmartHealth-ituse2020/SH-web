@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS ADMIN
 CREATE TABLE IF NOT EXISTS APPOINTMENT
 (
     id SERIAL PRIMARY KEY,
-    prediction_result boolean,
+    prediction_result varchar(25),
     doctor_diagnosis text COLLATE pg_catalog."default",
     diagnosis_comment text COLLATE pg_catalog."default",
     appointment_date date,

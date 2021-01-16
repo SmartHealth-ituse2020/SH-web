@@ -5,10 +5,11 @@ from smarthealth_web.forms import DoctorLoginForm, AddPatientForm, AddAppointmen
 from smarthealth_web.dboperations import (
     get_doctor_by_username_or_national_id, get_appointments_of_doctor, get_patient_by_nid
 )
+from smarthealth_web.utils import get_prediction
 from decouple import config
 from smarthealth_web import dboperations
 import psycopg2 as dpapi2
-from time import time
+
 
 bp = Blueprint('doctor', __name__, url_prefix='/doctor')
 DATABASE_URL = config('DATABASE_URL')
@@ -93,7 +94,16 @@ def add_appointment():
         else:
             error = "Patient does not exists!."
             return render_template('doctor/add_appointment.html', form=form, error=error)
-        pred = bool(time() % 2)  # get_prediction(patient_nid)
+
+        pred = get_prediction(patient_id)
+        if b"Corrupted" in pred or b"Forbidden" in pred:
+            pred = "Error"
+        elif b"Pos" in pred:
+            pred = "Hypertension"
+        elif b"Neg" in pred:
+            pred = "Healthy"
+        else:
+            pred = "System Fault"
         dboperations.add_appointment(
             pred,
             form.diagnosis.data,
@@ -103,6 +113,7 @@ def add_appointment():
         )
         return redirect(url_for("doctor.home_page"))
     return render_template('doctor/add_appointment.html', form=form)
+
 
 @bp.route('/patient_details/<patient_id>', methods=('GET', 'POST'))
 @doctor_login_required

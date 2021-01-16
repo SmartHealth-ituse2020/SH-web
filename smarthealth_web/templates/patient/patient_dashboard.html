@@ -24,10 +24,10 @@
                 <span class="icon is-small is-left">
                 <i class="fa fa-info"></i>
                 </span></a>
-                {{ rows[i][2] }}</td>
-            <td>{{ rows[i][3] }}</td>
-            <td>{{ rows[i][4] }}</td>
-            <td>{{ rows[i][5] }}</td>
+                {{ rows[i][2] | capitalize }}</td>
+            <td>{{ rows[i][3] | capitalize }}</td>
+            <td>{{ rows[i][4] | truncate(40)}}</td>
+            <td>{{ rows[i][5] | truncate(40)}}</td>
         </tr>
 {%endfor%}
     </tbody> 
