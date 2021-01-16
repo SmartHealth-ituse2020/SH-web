@@ -48,7 +48,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="{{ url_for('static', filename='js/dataTables.bulma.min.js') }}"></script>
 <script>
-    $('.table').DataTable();
+    $('.table').DataTable({
+        "order": [[ 0, "desc" ]]
+    });
 </script>
 <div class="field is-grouped is-grouped-centered">
 </div>
