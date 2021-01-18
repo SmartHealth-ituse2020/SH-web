@@ -25,3 +25,19 @@ def client(app):
 @pytest.fixture
 def runner(app):
     return app.test_cli_runner()
+
+
+def login_doctor(client):
+    with client:
+        res = client.post("/doctor/login", data=dict(
+            username="dtestuser",
+            password="1"
+        ), follow_redirects=True)
+
+
+def login_admin(client):
+    with client:
+        res = client.post("/admin/login", data=dict(
+            username="atestuser",
+            password="1"
+        ), follow_redirects=True)

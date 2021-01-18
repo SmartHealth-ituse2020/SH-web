@@ -11,11 +11,13 @@ INSERT INTO doctor(name, surname, password, username, hospital, title, professio
 
 INSERT INTO admin(name, surname, username, password)
     VALUES
-    ('admin1','surname1','adminuser1','password1'),
-    ('atest','surname1','atestuser','password1');
+    ('atest','surname1','atestuser',%s),
+    ('admin1','surname1','adminuser1',%s);
 
 INSERT INTO appointment(
         prediction_result, doctor_diagnosis, diagnosis_comment,
         appointment_date, related_patient, related_doctor
         )
-    VALUES (True,'diagnos1','comment1','now()',1,1);
+    VALUES 
+        ('Healthy','diagnos1','viewdoctorappointmentss','now()',1,0),
+        ('Hypertension','diagnos1','comment1','now()',1,1);

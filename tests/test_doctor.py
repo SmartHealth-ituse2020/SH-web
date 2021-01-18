@@ -1,7 +1,10 @@
 from smarthealth_web.dboperations import query_where
 from flask_wtf import FlaskForm
+from tests.conftest import login_doctor
+from flask import url_for
 import pytest
 
+@pytest.mark.skip
 def test_login(client):
     with client:
         req = client.get("/doctor/login")
@@ -23,9 +26,9 @@ def test_login(client):
         assert res.status_code == 200
 
 
-@pytest.mark.skip
 def test_add_patient_form_with_proper_input(app):
     cli = app.test_client()
+    login_doctor(cli)
     with app.app_context():
         form = {    
             "patient_national_id": "00000000000",
@@ -35,14 +38,15 @@ def test_add_patient_form_with_proper_input(app):
             "patient_gender": "Male"
         }
         res = cli.post('/doctor/add_patient', data=form, follow_redirects=False)
-        p = query_where(table_name="patient", condition="name='test proper input'")
+        p = query_where(table_name="patient", condition="name= 'test proper input'")
     assert p != []
     assert res.status_code == 302
 
 
 @pytest.mark.skip
-def test_add_patient_form_without_age(app,doctorSession):
+def test_add_patient_form_without_age(app):
     cli = app.test_client()
+    login_doctor(cli)
     with app.app_context():
         form = {
             "patient_national_id": "00000000000",
@@ -60,8 +64,10 @@ def test_add_patient_form_without_age(app,doctorSession):
     #assert b"This field is required" in res.data
 
 
+@pytest.mark.skip
 def test_add_patient_form_without_name(app):
     cli = app.test_client()
+    login_doctor(cli)
     with app.app_context():
         form = {
             "patient_national_id": "00000000000",
@@ -79,8 +85,10 @@ def test_add_patient_form_without_name(app):
     #assert b"This field is required" in res.data
 
 
+@pytest.mark.skip
 def test_add_patient_form_without_surname(app):
     cli = app.test_client()
+    login_doctor(cli)
     with app.app_context():
         form = {
             "patient_national_id": "00000000000",
@@ -98,8 +106,10 @@ def test_add_patient_form_without_surname(app):
     #assert b"This field is required" in res.data
 
 
+@pytest.mark.skip
 def test_add_patient_form_without_gender(app):
     cli = app.test_client()
+    login_doctor(cli)
     with app.app_context():
         form = {
             "patient_national_id": "00000000000",
@@ -114,3 +124,56 @@ def test_add_patient_form_without_gender(app):
     assert res.status_code == 200
     #assert b"This field is required" in res.data
     assert p == []
+
+
+@pytest.mark.skip
+def test_home_page(app):
+    cli = app.test_client()
+    login_doctor(cli)
+    with app.app_context():
+        res = cli.get('/doctor/dashboard')
+    assert res.status_code == 200
+    assert b"viewdoctorappointmentss" in res.data
+
+
+@pytest.mark.skip
+def test_add_appointment(app):
+    cli = app.test_client()
+    login_doctor(cli)
+    with app.app_context():
+        form = {
+            "patient_national_id": "National_id1",
+            "diagnosis": "Healthy",
+            "note": "Nothing"
+        }
+        res = cli.post('/doctor/add_appointment', data=form, follow_redirects=True)
+        a = query_where("appointment","diagnosis_comment = 'Nothing'")
+    assert res.status_code == 200
+    assert a != []
+
+
+@pytest.mark.skip
+def test_patient_details(app):
+    cli = app.test_client()
+    login_doctor(cli)
+    with app.app_context():
+        p = query_where("patient", "id = '1'")
+        res = cli.post('/doctor/patient_details/<patient_id>', data = 1)
+    assert res.status_code == 200
+    assert res == 1
+
+
+@pytest.mark.skip
+def test_update_appointment(app):
+    cli = app.test_client()
+    login_doctor(cli)
+    with app.app_context():
+        form = {
+            "patient_nid": "National_id1",
+            "diagnosis": "Healthy",
+            "note": "verymuch"
+        }
+        res = cli.post('/doctor/update_appointment/<appointment_id>', data=form, follow_redirects=True)
+        a = query_where("appointment","diagnosis_comment = 'Healthy'")
+    assert res.status_code == 200
+    assert a != []
