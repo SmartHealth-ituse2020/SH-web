@@ -16,6 +16,7 @@ def create_app(test_config=False, test_db=None):
     if test_config:
         app.config['TESTING'] = True
         app.config['DEBUG'] = False
+        app.config['CSRF_ENABLED'] = False
         app.config['WTF_CSRF_ENABLED'] = False
         app.config['DATABASE'] = test_db
         if test_db is None:

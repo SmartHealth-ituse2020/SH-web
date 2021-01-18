@@ -1,9 +1,10 @@
 import psycopg2 as dbapi2
 from flask import current_app
 from decouple import config
-
+from werkzeug.security import generate_password_hash
 
 INIT_STATEMENTS = [open("database_design.sql", "r").read()]
+TEST_STATEMENTS = [open("tests\data.sql", "r").read()]
 
 
 def initialize(delete=False, test=False):
@@ -22,7 +23,10 @@ def initialize(delete=False, test=False):
             print("Initializing database.")
             cursor.execute(statement)
             print("Done.")
-
+        if test:
+            for stats in TEST_STATEMENTS:
+                cursor.execute(stats,(generate_password_hash('1'),generate_password_hash('1'),
+                generate_password_hash('1'),generate_password_hash('1'),generate_password_hash('1')))
         cursor.close()
 
 
