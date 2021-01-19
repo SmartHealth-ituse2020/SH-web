@@ -1,21 +1,22 @@
 import psycopg2 as dbapi2
 from smarthealth_web.dboperations import (
     add_newpatient, query_where, get_admin_by_username, delete_patient_with_national_id, get_doctor_by_username_or_national_id,
-    add_doctor_to_database, get_appointments_of_doctor, get_appointments_of_patient, get_admin_name_by_id, delete_doctor_with_id)
+    add_doctor_to_database, get_appointments_of_doctor, get_appointments_of_patient, get_admin_name_by_id, delete_doctor_with_id,
+    deactivate_doctor, add_appointment, get_patient_by_nid)
 
 
 def test_add_newpatient(app):
     # Test adding without being present
     with app.app_context():
-        add_newpatient("National_id", "Name", "Surname", "Gender", 18)
-        u = query_where("patient", f"name ='Name'")
+        add_newpatient("add_Nid", "Name", "Surname", "Gender", 18)
+        u = query_where("patient", f"national_id ='add_Nid'")
         # uid is patientid which is serial
         # utime is cratetime which is timestamp
         # ulogcode is also created during function call
         uid = u[0][0]
         utime = u[0][6]
         ulogcode = u[0][5]
-    assert u[0] == (uid, 'Name', 'Surname', 'Gender', 18, ulogcode, utime, 'National_id')
+    assert u[0] == (uid, 'Name', 'Surname', 'Gender', 18, ulogcode, utime, 'add_Nid')
     # Test again with being present
     # To be implemented
 
@@ -26,7 +27,7 @@ def test_query_where(app):
         print(u)
         uid = u[0][0]
         utime = u[0][6]
-    assert u[0] == (uid, 'patient1', 'surname1', 'Male', 18, 12341234, utime, 'National_id1')
+    assert u[0] == (uid, 'patient1', 'getpatient', 'Male', 18, 12341234, utime, 'National_id1')
 
 
 def test_get_admin_by_username(app):
@@ -83,3 +84,24 @@ def test_delete_doctor_with_id(app):
         delete_doctor_with_id(2)
         u = get_admin_by_username('docdelete')
     assert u == None
+
+
+def test_deactivate_doctor(app):
+    with app.app_context():
+        deactivate_doctor(4)
+        u = query_where("doctor","name = 'deactivdoctor1'")
+    assert u[0][10] == False
+
+
+def test_add_appointment(app):
+    with app.app_context():
+        add_appointment("Healthy","DocHealthy","Doccommm",1,1)
+        a = ("appointment","doctor_diagnosis = 'DocHealthy'")
+    assert a != None
+
+
+def test_get_patient_by_nid(app):
+    with app.app_context():
+        p = get_patient_by_nid("pgettestNid")
+        a = query_where("patient", "name = 'pgettest'")
+    assert a[0] == p

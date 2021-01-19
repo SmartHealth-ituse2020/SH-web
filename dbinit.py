@@ -26,7 +26,8 @@ def initialize(delete=False, test=False):
         if test:
             for stats in TEST_STATEMENTS:
                 cursor.execute(stats,(generate_password_hash('1'),generate_password_hash('1'),
-                generate_password_hash('1'),generate_password_hash('1'),generate_password_hash('1')))
+                generate_password_hash('1'),generate_password_hash('1'),generate_password_hash('1'),
+                generate_password_hash('1')))
         cursor.close()
 
 
