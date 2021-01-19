@@ -1,7 +1,8 @@
-INSERT INTO patient(name, surname, gender, age, logcode, national_id)
+INSERT INTO patient(name, surname, gender, age, logcode, national_id, cratetime)
     VALUES
-    ('patient1','surname1','Male',18,12341234,'National_id1'),
-    ('ptest','surname1','Male',18,12341234,'ptestNid');
+    ('ptest','veryuniquepatient','Male',18,12341234,'Nid12341234','now()'),
+    ('patient1','surname1','Male',18,12341234,'National_id1','now()'),
+    ('ptest','surname1','Male',18,12341234,'ptestNid','now()');
 
 INSERT INTO doctor(name, surname, password, username, hospital, title, profession, added_by, national_id, isActive)
     VALUES
@@ -19,5 +20,5 @@ INSERT INTO appointment(
         appointment_date, related_patient, related_doctor
         )
     VALUES 
-        ('Healthy','diagnos1','viewdoctorappointmentss','now()',1,0),
+        ('Healthy','diagnos1','viewdoctorappointmentss','now()',1,1),
         ('Hypertension','diagnos1','comment1','now()',1,1);

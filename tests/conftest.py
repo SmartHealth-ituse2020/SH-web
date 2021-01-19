@@ -41,3 +41,11 @@ def login_admin(client):
             username="atestuser",
             password="1"
         ), follow_redirects=True)
+
+
+def login_patient(client):
+    with client:
+        res = client.post("/patient/login", data=dict(
+            national_id="Nid12341234",
+            logcode="12341234"
+        ), follow_redirects=True)

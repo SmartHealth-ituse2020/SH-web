@@ -4,7 +4,6 @@ from tests.conftest import login_doctor
 from flask import url_for
 import pytest
 
-@pytest.mark.skip
 def test_login(client):
     with client:
         req = client.get("/doctor/login")
@@ -43,7 +42,6 @@ def test_add_patient_form_with_proper_input(app):
     assert res.status_code == 302
 
 
-@pytest.mark.skip
 def test_add_patient_form_without_age(app):
     cli = app.test_client()
     login_doctor(cli)
@@ -64,7 +62,6 @@ def test_add_patient_form_without_age(app):
     #assert b"This field is required" in res.data
 
 
-@pytest.mark.skip
 def test_add_patient_form_without_name(app):
     cli = app.test_client()
     login_doctor(cli)
@@ -85,7 +82,6 @@ def test_add_patient_form_without_name(app):
     #assert b"This field is required" in res.data
 
 
-@pytest.mark.skip
 def test_add_patient_form_without_surname(app):
     cli = app.test_client()
     login_doctor(cli)
@@ -106,7 +102,6 @@ def test_add_patient_form_without_surname(app):
     #assert b"This field is required" in res.data
 
 
-@pytest.mark.skip
 def test_add_patient_form_without_gender(app):
     cli = app.test_client()
     login_doctor(cli)
@@ -126,9 +121,8 @@ def test_add_patient_form_without_gender(app):
     assert p == []
 
 
-@pytest.mark.skip
-def test_home_page(app):
-    cli = app.test_client()
+def test_home_page(app):# don't work
+    cli = app.test_client()# But will work like this
     login_doctor(cli)
     with app.app_context():
         res = cli.get('/doctor/dashboard')
@@ -137,7 +131,7 @@ def test_home_page(app):
 
 
 @pytest.mark.skip
-def test_add_appointment(app):
+def test_add_appointment(app):# Need to mock get_prediction
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
@@ -152,19 +146,16 @@ def test_add_appointment(app):
     assert a != []
 
 
-@pytest.mark.skip
-def test_patient_details(app):
-    cli = app.test_client()
+def test_patient_details(app):# Works good, patient can be any patient that the doctor
+    cli = app.test_client()# In our current session has added
     login_doctor(cli)
     with app.app_context():
-        p = query_where("patient", "id = '1'")
-        res = cli.post('/doctor/patient_details/<patient_id>', data = 1)
+        res = cli.get('/doctor/patient_details/1')
     assert res.status_code == 200
-    assert res == 1
+    assert b"ptest" in res.data
 
 
-@pytest.mark.skip
-def test_update_appointment(app):
+def test_update_appointment(app):# Can't post to the page successfully
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
@@ -173,7 +164,9 @@ def test_update_appointment(app):
             "diagnosis": "Healthy",
             "note": "verymuch"
         }
-        res = cli.post('/doctor/update_appointment/<appointment_id>', data=form, follow_redirects=True)
-        a = query_where("appointment","diagnosis_comment = 'Healthy'")
+        res = cli.post('/doctor/update_appointment/1', data=form, follow_redirects=True)
+        a = query_where("appointment","diagnosis_comment = 'verymuch'")
+        b = query_where("appointment","diagnosis_comment = 'viewdoctorappointmentss'")
     assert res.status_code == 200
+    assert b != []
     assert a != []
