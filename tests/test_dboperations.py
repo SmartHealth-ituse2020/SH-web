@@ -2,7 +2,7 @@ import psycopg2 as dbapi2
 from smarthealth_web.dboperations import (
     add_newpatient, query_where, get_admin_by_username, delete_patient_with_national_id, get_doctor_by_username_or_national_id,
     add_doctor_to_database, get_appointments_of_doctor, get_appointments_of_patient, get_admin_name_by_id, delete_doctor_with_id,
-    deactivate_doctor, add_appointment, get_patient_by_nid)
+    deactivate_doctor, add_appointment, get_patient_by_nid, update_appointment)
 
 
 def test_add_newpatient(app):
@@ -92,6 +92,12 @@ def test_deactivate_doctor(app):
         u = query_where("doctor","name = 'deactivdoctor1'")
     assert u[0][10] == False
 
+
+def test_update_appointment(app):
+    with app.app_context():
+        update_appointment(1,'Nid12341234','unhealthy','veryunhealthy')
+        u = query_where("appointment","id = 1")
+    assert u[0][3] == "veryunhealthy"
 
 def test_add_appointment(app):
     with app.app_context():
