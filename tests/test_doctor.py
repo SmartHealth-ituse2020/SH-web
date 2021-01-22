@@ -121,29 +121,30 @@ def test_add_patient_form_without_gender(app):
     assert p == []
 
 
-@pytest.mark.skip
 def test_home_page(app):# don't work
     cli = app.test_client()# But will work like this
     login_doctor(cli)
     with app.app_context():
         res = cli.get('/doctor/dashboard')
     assert res.status_code == 200
-    assert b"viewdoctorappointmentss" in res.data
+    assert b"Doctor's Diagnosis" in res.data
 
 
-@pytest.mark.skip
-def test_add_appointment(app):# Need to mock get_prediction
-    cli = app.test_client()
-    login_doctor(cli)
-    with app.app_context():
-        form = {
-            "patient_national_id": "National_id1",
-            "diagnosis": "Healthy",
-            "note": "Nothing"
-        }
-        res = cli.post('/doctor/add_appointment', data=form, follow_redirects=True)
+def test_add_appointment(app, mocker):# Need to mock get_prediction
+    cli = app.test_client()# This doesn't work
+    login_doctor(cli)# add_appointment has 3 possible return routes
+    mocker.patch('smarthealth_web.doctor.get_prediction', return_value = "Corrupted")
+    with app.app_context():# But asserting some sentences that are supposed to be there fails
+        res = cli.post('/doctor/add_appointment', data=dict(
+            patient_national_id="National_id1",
+            diagnosis="Healthy",
+            note="Nothing"
+        ), follow_redirects=True)
         a = query_where("appointment","diagnosis_comment = 'Nothing'")
     assert res.status_code == 200
+    assert b"Click here to add patient" in res.data#All three assertion fails even though
+    assert b"Doctor's Diagnosis" in res.data#/doctor/add_appointment has no other return route
+    assert b"Patient does not exists!." in res.data
     assert a != []
 
 
@@ -156,7 +157,6 @@ def test_patient_details(app):# Works good, patient can be any patient that the 
     assert b"ptest" in res.data
 
 
-@pytest.mark.skip
 def test_update_appointment(app):# Can't post to the page successfully
     cli = app.test_client()
     login_doctor(cli)
