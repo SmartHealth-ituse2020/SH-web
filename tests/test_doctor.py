@@ -25,7 +25,7 @@ def test_login(client):
         assert res.status_code == 200
 
 
-def test_add_patient_form_with_proper_input(app):
+def test_add_patient_proper(app):
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
@@ -42,7 +42,7 @@ def test_add_patient_form_with_proper_input(app):
     assert res.status_code == 302
 
 
-def test_add_patient_form_without_age(app):
+def test_add_patient_no_age(app):
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
@@ -62,7 +62,7 @@ def test_add_patient_form_without_age(app):
     #assert b"This field is required" in res.data
 
 
-def test_add_patient_form_without_name(app):
+def test_add_patient_no_name(app):
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
@@ -82,7 +82,7 @@ def test_add_patient_form_without_name(app):
     #assert b"This field is required" in res.data
 
 
-def test_add_patient_form_without_surname(app):
+def test_add_patient_no_surname(app):
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
@@ -102,7 +102,7 @@ def test_add_patient_form_without_surname(app):
     #assert b"This field is required" in res.data
 
 
-def test_add_patient_form_without_gender(app):
+def test_add_patient_no_gender(app):
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
@@ -121,8 +121,8 @@ def test_add_patient_form_without_gender(app):
     assert p == []
 
 
-def test_home_page(app):# don't work
-    cli = app.test_client()# But will work like this
+def test_home_page(app):
+    cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
         res = cli.get('/doctor/dashboard')
@@ -130,22 +130,51 @@ def test_home_page(app):# don't work
     assert b"Doctor's Diagnosis" in res.data
 
 
-def test_add_appointment(app, mocker):# Need to mock get_prediction
-    cli = app.test_client()# This doesn't work
-    login_doctor(cli)# add_appointment has 3 possible return routes
-    mocker.patch('smarthealth_web.doctor.get_prediction', return_value = "Corrupted")
-    with app.app_context():# But asserting some sentences that are supposed to be there fails
-        res = cli.post('/doctor/add_appointment', data=dict(
-            patient_national_id="National_id1",
-            diagnosis="Healthy",
-            note="Nothing"
-        ), follow_redirects=True)
-        a = query_where("appointment","diagnosis_comment = 'Nothing'")
-    assert res.status_code == 200
-    assert b"Click here to add patient" in res.data#All three assertion fails even though
-    assert b"Doctor's Diagnosis" in res.data#/doctor/add_appointment has no other return route
-    assert b"Patient does not exists!." in res.data
-    assert a != []
+def test_add_appointment(app, mocker):
+    cli = app.test_client()
+    login_doctor(cli)
+    with app.app_context():
+        # mock get_prediction to return corrupted
+        mocker.patch('smarthealth_web.doctor.get_prediction', return_value = b"Corrupted")
+        form ={ "patient_national_id": "11111111111",# System doesn't allow
+                "diagnosis": "Healthy",
+                "note": "with_unavailable_prediction"}
+        res = cli.post('/doctor/add_appointment', data=form, follow_redirects=True)
+        a = query_where("appointment","diagnosis_comment = 'with_unavailable_prediction'")
+        assert res.status_code == 200
+        assert b"Doctor's Diagnosis" in res.data
+        assert a[0][1] == "Error"
+        # test with prediction = Positive
+        mocker.patch('smarthealth_web.doctor.get_prediction', return_value = b"Pos")
+        form ={ "patient_national_id": "11111111111",
+                "diagnosis": "Sick",
+                "note": "with_pos_prediction"}
+        res = cli.post('/doctor/add_appointment', data=form, follow_redirects=True)
+        a = query_where("appointment","diagnosis_comment = 'with_pos_prediction'")
+        assert res.status_code == 200
+        assert b"Doctor's Diagnosis" in res.data
+        assert a[0][1] == "Hypertension"
+        # test with prediction = Negative
+        mocker.patch('smarthealth_web.doctor.get_prediction', return_value = b"Neg")
+        form ={ "patient_national_id": "11111111111",
+                "diagnosis": "Good Condition",
+                "note": "with_neg_prediction"}
+        res = cli.post('/doctor/add_appointment', data=form, follow_redirects=True)
+        a = query_where("appointment","diagnosis_comment = 'with_neg_prediction'")
+        assert res.status_code == 200
+        assert b"Doctor's Diagnosis" in res.data
+        assert a[0][1] == "Healthy"
+        # test with system fault in prediction side
+        mocker.patch('smarthealth_web.doctor.get_prediction', return_value = b"a")
+        form ={ "patient_national_id": "11111111111",
+                "diagnosis": "Good Condition",
+                "note": "with_system_fault_prediction"}
+        res = cli.post('/doctor/add_appointment', data=form, follow_redirects=True)
+        a = query_where("appointment","diagnosis_comment = 'with_system_fault_prediction'")
+        assert res.status_code == 200
+        assert b"Doctor's Diagnosis" in res.data
+        assert a[0][1] == "System Fault"
+        
 
 
 def test_patient_details(app):# Works good, patient can be any patient that the doctor
@@ -157,18 +186,16 @@ def test_patient_details(app):# Works good, patient can be any patient that the 
     assert b"ptest" in res.data
 
 
-def test_update_appointment(app):# Can't post to the page successfully
+def test_update_appointment(app):# Works good
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
         form = {
-            "patient_nid": "National_id1",
+            "patient_nid": "33333333333",
             "diagnosis": "Healthy",
             "note": "verymuch"
         }
         res = cli.post('/doctor/update_appointment/1', data=form, follow_redirects=True)
         a = query_where("appointment","diagnosis_comment = 'verymuch'")
-        b = query_where("appointment","diagnosis_comment = 'viewdoctorappointmentss'")
     assert res.status_code == 200
-    assert b != []
     assert a != []

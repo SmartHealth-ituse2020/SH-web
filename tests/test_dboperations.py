@@ -27,7 +27,7 @@ def test_query_where(app):
         print(u)
         uid = u[0][0]
         utime = u[0][6]
-    assert u[0] == (uid, 'patient1', 'getpatient', 'Male', 18, 12341234, utime, 'National_id1')
+    assert u[0] == (uid, 'patient1', 'getpatient', 'Male', 18, 12341234, utime, '22222222222')
 
 
 def test_get_admin_by_username(app):
@@ -95,7 +95,7 @@ def test_deactivate_doctor(app):
 
 def test_update_appointment(app):
     with app.app_context():
-        update_appointment(1,'Nid12341234','unhealthy','veryunhealthy')
+        update_appointment(1,'11111111111','unhealthy','veryunhealthy')
         u = query_where("appointment","id = 1")
     assert u[0][3] == "veryunhealthy"
 
@@ -108,6 +108,6 @@ def test_add_appointment(app):
 
 def test_get_patient_by_nid(app):
     with app.app_context():
-        p = get_patient_by_nid("pgettestNid")
+        p = get_patient_by_nid("44444444444")
         a = query_where("patient", "name = 'pgettest'")
     assert a[0] == p

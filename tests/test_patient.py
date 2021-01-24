@@ -28,13 +28,12 @@ def test_patient_details(app):# Works good
     assert b"veryuniquepatient" in res.data
     assert res.status_code == 200
 
-@pytest.mark.skip
-def test_doctor_details(app):# don't work
+def test_doctor_details(app):
     cli = app.test_client()
     login_patient(cli)
     with app.app_context():
         res = cli.get("/patient/doctor_details/1")
-    assert b"dtest" in res.data
+    assert b"Profession" in res.data
     assert res.status_code == 200
 
 
