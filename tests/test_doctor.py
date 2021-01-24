@@ -23,6 +23,17 @@ def test_login(client):
         ), follow_redirects=True)
         assert b"Appointment ID" in res.data
         assert res.status_code == 200
+        res = client.post("/doctor/login", data=dict(
+            username="",
+            password="1"
+        ), follow_redirects=True)
+        assert b"Appointment ID" not in res.data
+        res = client.post("/doctor/login", data=dict(
+            username="dtestuser",
+            password=""
+        ), follow_redirects=True)
+        assert b"Appointment ID" not in res.data
+        assert res.status_code == 200
 
 
 def test_add_patient_proper(app):
@@ -136,7 +147,7 @@ def test_add_appointment(app, mocker):
     with app.app_context():
         # mock get_prediction to return corrupted
         mocker.patch('smarthealth_web.doctor.get_prediction', return_value = b"Corrupted")
-        form ={ "patient_national_id": "11111111111",# System doesn't allow
+        form ={ "patient_national_id": "11111111111",
                 "diagnosis": "Healthy",
                 "note": "with_unavailable_prediction"}
         res = cli.post('/doctor/add_appointment', data=form, follow_redirects=True)
