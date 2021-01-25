@@ -3,9 +3,6 @@ from decouple import config
 from flask import session
 import pytest
 import dbinit
-# I tried to run the statements in data.sql to fill the test database
-# But I failed, it doesn't break but it doesn't fill too
-TEST_STATEMENTS = [open("tests\data.sql", "r").read()]
 
 @pytest.fixture(scope="module")
 def app():
@@ -40,4 +37,12 @@ def login_admin(client):
         res = client.post("/admin/login", data=dict(
             username="atestuser",
             password="1"
+        ), follow_redirects=True)
+
+
+def login_patient(client):
+    with client:
+        res = client.post("/patient/login", data=dict(
+            national_id="11111111111",
+            logcode="12341234"
         ), follow_redirects=True)

@@ -4,7 +4,6 @@ from tests.conftest import login_doctor
 from flask import url_for
 import pytest
 
-@pytest.mark.skip
 def test_login(client):
     with client:
         req = client.get("/doctor/login")
@@ -24,9 +23,20 @@ def test_login(client):
         ), follow_redirects=True)
         assert b"Appointment ID" in res.data
         assert res.status_code == 200
+        res = client.post("/doctor/login", data=dict(
+            username="",
+            password="1"
+        ), follow_redirects=True)
+        assert b"Appointment ID" not in res.data
+        res = client.post("/doctor/login", data=dict(
+            username="dtestuser",
+            password=""
+        ), follow_redirects=True)
+        assert b"Appointment ID" not in res.data
+        assert res.status_code == 200
 
 
-def test_add_patient_form_with_proper_input(app):
+def test_add_patient_proper(app):
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
@@ -43,8 +53,7 @@ def test_add_patient_form_with_proper_input(app):
     assert res.status_code == 302
 
 
-@pytest.mark.skip
-def test_add_patient_form_without_age(app):
+def test_add_patient_no_age(app):
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
@@ -64,8 +73,7 @@ def test_add_patient_form_without_age(app):
     #assert b"This field is required" in res.data
 
 
-@pytest.mark.skip
-def test_add_patient_form_without_name(app):
+def test_add_patient_no_name(app):
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
@@ -85,8 +93,7 @@ def test_add_patient_form_without_name(app):
     #assert b"This field is required" in res.data
 
 
-@pytest.mark.skip
-def test_add_patient_form_without_surname(app):
+def test_add_patient_no_surname(app):
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
@@ -106,8 +113,7 @@ def test_add_patient_form_without_surname(app):
     #assert b"This field is required" in res.data
 
 
-@pytest.mark.skip
-def test_add_patient_form_without_gender(app):
+def test_add_patient_no_gender(app):
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
@@ -126,54 +132,81 @@ def test_add_patient_form_without_gender(app):
     assert p == []
 
 
-@pytest.mark.skip
 def test_home_page(app):
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
         res = cli.get('/doctor/dashboard')
     assert res.status_code == 200
-    assert b"viewdoctorappointmentss" in res.data
+    assert b"Doctor's Diagnosis" in res.data
 
 
-@pytest.mark.skip
-def test_add_appointment(app):
+def test_add_appointment(app, mocker):
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
-        form = {
-            "patient_national_id": "National_id1",
-            "diagnosis": "Healthy",
-            "note": "Nothing"
-        }
+        # mock get_prediction to return corrupted
+        mocker.patch('smarthealth_web.doctor.get_prediction', return_value = b"Corrupted")
+        form ={ "patient_national_id": "11111111111",
+                "diagnosis": "Healthy",
+                "note": "with_unavailable_prediction"}
         res = cli.post('/doctor/add_appointment', data=form, follow_redirects=True)
-        a = query_where("appointment","diagnosis_comment = 'Nothing'")
-    assert res.status_code == 200
-    assert a != []
+        a = query_where("appointment","diagnosis_comment = 'with_unavailable_prediction'")
+        assert res.status_code == 200
+        assert b"Doctor's Diagnosis" in res.data
+        assert a[0][1] == "Error"
+        # test with prediction = Positive
+        mocker.patch('smarthealth_web.doctor.get_prediction', return_value = b"Pos")
+        form ={ "patient_national_id": "11111111111",
+                "diagnosis": "Sick",
+                "note": "with_pos_prediction"}
+        res = cli.post('/doctor/add_appointment', data=form, follow_redirects=True)
+        a = query_where("appointment","diagnosis_comment = 'with_pos_prediction'")
+        assert res.status_code == 200
+        assert b"Doctor's Diagnosis" in res.data
+        assert a[0][1] == "Hypertension"
+        # test with prediction = Negative
+        mocker.patch('smarthealth_web.doctor.get_prediction', return_value = b"Neg")
+        form ={ "patient_national_id": "11111111111",
+                "diagnosis": "Good Condition",
+                "note": "with_neg_prediction"}
+        res = cli.post('/doctor/add_appointment', data=form, follow_redirects=True)
+        a = query_where("appointment","diagnosis_comment = 'with_neg_prediction'")
+        assert res.status_code == 200
+        assert b"Doctor's Diagnosis" in res.data
+        assert a[0][1] == "Healthy"
+        # test with system fault in prediction side
+        mocker.patch('smarthealth_web.doctor.get_prediction', return_value = b"a")
+        form ={ "patient_national_id": "11111111111",
+                "diagnosis": "Good Condition",
+                "note": "with_system_fault_prediction"}
+        res = cli.post('/doctor/add_appointment', data=form, follow_redirects=True)
+        a = query_where("appointment","diagnosis_comment = 'with_system_fault_prediction'")
+        assert res.status_code == 200
+        assert b"Doctor's Diagnosis" in res.data
+        assert a[0][1] == "System Fault"
+        
 
 
-@pytest.mark.skip
-def test_patient_details(app):
-    cli = app.test_client()
+def test_patient_details(app):# Works good, patient can be any patient that the doctor
+    cli = app.test_client()# In our current session has added
     login_doctor(cli)
     with app.app_context():
-        p = query_where("patient", "id = '1'")
-        res = cli.post('/doctor/patient_details/<patient_id>', data = 1)
+        res = cli.get('/doctor/patient_details/1')
     assert res.status_code == 200
-    assert res == 1
+    assert b"ptest" in res.data
 
 
-@pytest.mark.skip
-def test_update_appointment(app):
+def test_update_appointment(app):# Works good
     cli = app.test_client()
     login_doctor(cli)
     with app.app_context():
         form = {
-            "patient_nid": "National_id1",
+            "patient_nid": "33333333333",
             "diagnosis": "Healthy",
             "note": "verymuch"
         }
-        res = cli.post('/doctor/update_appointment/<appointment_id>', data=form, follow_redirects=True)
-        a = query_where("appointment","diagnosis_comment = 'Healthy'")
+        res = cli.post('/doctor/update_appointment/1', data=form, follow_redirects=True)
+        a = query_where("appointment","diagnosis_comment = 'verymuch'")
     assert res.status_code == 200
     assert a != []
